@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kaungsetlin3013.github.io/portfolio/sitemap.xml
+Sitemap: https://kaungsetlinn.com/sitemap.xml
