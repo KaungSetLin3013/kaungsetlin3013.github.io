@@ -298,12 +298,11 @@
   .about-photo-inner { position: relative; aspect-ratio: 3/4; }
   .about-photo-bg {
     position: absolute; inset: 8% 5%;
-    background: linear-gradient(160deg, var(--surface), var(--bg), var(--surface));
-    background-size: 200% 200%;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(0,245,160,0.4), #050505 60%);
     border: 1px solid var(--border);
-    animation: bgShift 6s ease-in-out infinite, bgGlowPulse 2.4s ease-in-out infinite;
+    transition: background 0.15s ease;
+    animation: bgGlowPulse 2.4s ease-in-out infinite;
   }
-  @keyframes bgShift { 0%, 100% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } }
   @keyframes bgGlowPulse {
     0%, 100% { box-shadow: 0 0 12px rgba(0,245,160,0.35), 0 0 26px rgba(0,245,160,0.18); }
     50%      { box-shadow: 0 0 22px rgba(0,245,160,0.7), 0 0 48px rgba(0,245,160,0.4); }
@@ -1617,6 +1616,17 @@ function setLang(lang) {
     });
     aboutPhotoTilt.addEventListener('mouseleave', function() {
       aboutPhotoTilt.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+    });
+
+    // Spotlight tracks the cursor across the whole page, not just while hovering the frame
+    document.addEventListener('mousemove', function(e) {
+      var rect = aboutPhotoTilt.getBoundingClientRect();
+      var mx = ((e.clientX - rect.left) / rect.width) * 100;
+      var my = ((e.clientY - rect.top) / rect.height) * 100;
+      mx = Math.max(-40, Math.min(140, mx));
+      my = Math.max(-40, Math.min(140, my));
+      aboutPhotoTilt.style.setProperty('--mx', mx + '%');
+      aboutPhotoTilt.style.setProperty('--my', my + '%');
     });
   }
 })();
