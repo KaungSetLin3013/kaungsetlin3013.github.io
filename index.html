@@ -296,15 +296,19 @@
   @keyframes photoSlideDown { 0% { opacity: 0; transform: translateY(-90px); } 100% { opacity: 1; transform: translateY(0); } }
 
   .about-photo-inner { position: relative; aspect-ratio: 3/4; }
-  .about-photo-bg { position: absolute; inset: 8% 5%; background: linear-gradient(160deg, var(--surface), var(--bg), var(--surface)); background-size: 200% 200%; border: 1px solid var(--border); animation: bgShift 6s ease-in-out infinite; }
-  @keyframes bgShift { 0%, 100% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } }
-  .about-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; transition: transform 0.2s ease-out; }
-  .about-photo-glow-layer { animation: glowPulse 2.4s ease-in-out infinite; }
-  .about-photo-sharp-layer { filter: drop-shadow(0 0 2px rgba(0,245,160,0.25)); }
-  @keyframes glowPulse {
-    0%, 100% { filter: drop-shadow(0 0 10px rgba(0,245,160,0.55)) drop-shadow(0 0 22px rgba(0,245,160,0.28)); }
-    50%      { filter: drop-shadow(0 0 20px rgba(0,245,160,0.95)) drop-shadow(0 0 44px rgba(0,245,160,0.55)); }
+  .about-photo-bg {
+    position: absolute; inset: 8% 5%;
+    background: linear-gradient(160deg, var(--surface), var(--bg), var(--surface));
+    background-size: 200% 200%;
+    border: 1px solid var(--border);
+    animation: bgShift 6s ease-in-out infinite, bgGlowPulse 2.4s ease-in-out infinite;
   }
+  @keyframes bgShift { 0%, 100% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } }
+  @keyframes bgGlowPulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(0,245,160,0.35), 0 0 26px rgba(0,245,160,0.18); }
+    50%      { box-shadow: 0 0 22px rgba(0,245,160,0.7), 0 0 48px rgba(0,245,160,0.4); }
+  }
+  .about-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; transition: transform 0.2s ease-out; }
 
   .about-photo-cap { font-size: 0.55rem; letter-spacing: 0.15em; color: var(--muted2); text-transform: uppercase; margin-top: 14px; }
   .about-photo-cap::before { content: '// '; opacity: 0.5; }
@@ -705,8 +709,7 @@
         <div class="about-photo-tilt" id="aboutPhotoTilt">
           <div class="about-photo-inner">
             <div class="about-photo-bg"></div>
-            <img class="about-photo-img about-photo-glow-layer" src="myphoto.png" alt="">
-            <img class="about-photo-img about-photo-sharp-layer" src="myphoto.png" alt="Kaung Set Lin">
+            <img class="about-photo-img" src="myphoto.png" alt="Kaung Set Lin">
           </div>
         </div>
         <div class="about-photo-cap"><span class="lang-en-i">Tokyo, Japan</span><span class="lang-ja-i">東京、日本</span></div>
