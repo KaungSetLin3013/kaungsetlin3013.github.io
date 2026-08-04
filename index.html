@@ -286,30 +286,24 @@
   .about-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .about-grid { display: grid; grid-template-columns: 240px 1fr 1fr; gap: 48px; align-items: start; }
   .about-photo { position: relative; }
-  .about-photo-tilt { position: relative; transition: transform 0.3s ease; }
-  .photo-glow { position: absolute; inset: -24px; background: radial-gradient(circle, rgba(0,245,160,0.45), transparent 70%); filter: blur(22px); z-index: 0; pointer-events: none; animation: glowPulse 2.4s ease-in-out infinite; }
-  @keyframes glowPulse { 0%, 100% { opacity: 0.5; transform: scale(0.97); } 50% { opacity: 1; transform: scale(1.04); } }
-  .about-photo-inner { position: relative; z-index: 1; overflow: hidden; aspect-ratio: 3/4; border: 1px solid var(--border); transition: box-shadow 0.4s ease, border-color 0.4s ease; }
-  .about-photo-img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(30%); transition: filter 0.3s ease; }
-  .about-photo-inner:hover { border-color: var(--accent); }
-  .about-photo-inner:hover .about-photo-img { filter: grayscale(0%); }
-
-  .photo-panel { position: absolute; left: 0; width: 100%; height: 50%; background: var(--bg); z-index: 3; }
-  .photo-panel-top { top: 0; }
-  .photo-panel-bottom { bottom: 0; }
-  .about-photo.reveal-photo .photo-panel-top { animation: splitUp 0.9s cubic-bezier(0.65,0,0.35,1) forwards; }
-  .about-photo.reveal-photo .photo-panel-bottom { animation: splitDown 0.9s cubic-bezier(0.65,0,0.35,1) forwards; }
-
-  .photo-logo { position: absolute; left: 50%; top: 50%; width: 48px; height: 48px; object-fit: contain; transform: translate(-50%,-50%); z-index: 4; opacity: 0; }
-  .about-photo.reveal-photo .photo-logo { animation: logoTravel 1.15s cubic-bezier(0.55,0,0.35,1) forwards; animation-delay: 0.15s; }
-
-  @keyframes splitUp { 0% { transform: translateY(0); } 100% { transform: translateY(-100%); } }
-  @keyframes splitDown { 0% { transform: translateY(0); } 100% { transform: translateY(100%); } }
-  @keyframes logoTravel {
-    0%   { top: 50%; opacity: 1; width: 48px; height: 48px; }
-    60%  { opacity: 1; }
-    100% { top: 95%; opacity: 0; width: 28px; height: 28px; }
+  .about-photo-tilt {
+    position: relative; transition: transform 0.3s ease;
+    opacity: 0; transform: translateY(-90px);
   }
+  .about-photo.reveal-photo .about-photo-tilt {
+    animation: photoSlideDown 0.9s cubic-bezier(0.22,1,0.36,1) forwards;
+  }
+  @keyframes photoSlideDown { 0% { opacity: 0; transform: translateY(-90px); } 100% { opacity: 1; transform: translateY(0); } }
+
+  .about-photo-inner { position: relative; aspect-ratio: 3/4; }
+  .about-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; transition: transform 0.2s ease-out; }
+  .about-photo-glow-layer { animation: glowPulse 2.4s ease-in-out infinite; }
+  .about-photo-sharp-layer { filter: drop-shadow(0 0 2px rgba(0,245,160,0.25)); }
+  @keyframes glowPulse {
+    0%, 100% { filter: drop-shadow(0 0 10px rgba(0,245,160,0.55)) drop-shadow(0 0 22px rgba(0,245,160,0.28)); }
+    50%      { filter: drop-shadow(0 0 20px rgba(0,245,160,0.95)) drop-shadow(0 0 44px rgba(0,245,160,0.55)); }
+  }
+
   .about-photo-cap { font-size: 0.55rem; letter-spacing: 0.15em; color: var(--muted2); text-transform: uppercase; margin-top: 14px; }
   .about-photo-cap::before { content: '// '; opacity: 0.5; }
   .about-text p { font-size: 0.75rem; line-height: 1.9; color: var(--muted); margin-bottom: 20px; }
@@ -707,12 +701,9 @@
     <div class="about-grid">
       <div class="about-photo reveal" id="aboutPhoto">
         <div class="about-photo-tilt" id="aboutPhotoTilt">
-          <div class="photo-glow"></div>
           <div class="about-photo-inner">
-            <img class="about-photo-img" src="my_photo.png" alt="Kaung Set Lin">
-            <div class="photo-panel photo-panel-top"></div>
-            <div class="photo-panel photo-panel-bottom"></div>
-            <img class="photo-logo" src="KaungGif.gif" alt="Logo">
+            <img class="about-photo-img about-photo-glow-layer" src="myphoto.png" alt="">
+            <img class="about-photo-img about-photo-sharp-layer" src="myphoto.png" alt="Kaung Set Lin">
           </div>
         </div>
         <div class="about-photo-cap"><span class="lang-en-i">Tokyo, Japan</span><span class="lang-ja-i">東京、日本</span></div>
