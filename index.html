@@ -296,6 +296,8 @@
   @keyframes photoSlideDown { 0% { opacity: 0; transform: translateY(-90px); } 100% { opacity: 1; transform: translateY(0); } }
 
   .about-photo-inner { position: relative; aspect-ratio: 3/4; }
+  .about-photo-bg { position: absolute; inset: 8% 5%; background: linear-gradient(160deg, var(--surface), var(--bg), var(--surface)); background-size: 200% 200%; border: 1px solid var(--border); animation: bgShift 6s ease-in-out infinite; }
+  @keyframes bgShift { 0%, 100% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } }
   .about-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; transition: transform 0.2s ease-out; }
   .about-photo-glow-layer { animation: glowPulse 2.4s ease-in-out infinite; }
   .about-photo-sharp-layer { filter: drop-shadow(0 0 2px rgba(0,245,160,0.25)); }
@@ -702,6 +704,7 @@
       <div class="about-photo reveal" id="aboutPhoto">
         <div class="about-photo-tilt" id="aboutPhotoTilt">
           <div class="about-photo-inner">
+            <div class="about-photo-bg"></div>
             <img class="about-photo-img about-photo-glow-layer" src="myphoto.png" alt="">
             <img class="about-photo-img about-photo-sharp-layer" src="myphoto.png" alt="Kaung Set Lin">
           </div>
