@@ -115,7 +115,60 @@
     width: min(85vw, 420px); min-height: 4.5em; text-align: left;
   }
 
-  /* NOISE */
+  /* IDLE HACK EFFECT */
+  #idle-hack {
+    position: fixed; inset: 0; z-index: 99990;
+    background: rgba(5,5,8,0.88);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.9s ease;
+  }
+  #idle-hack.show { opacity: 1; pointer-events: auto; }
+  #idle-hack-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  #idle-hack-term {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
+    width: min(90vw, 560px); max-height: 70vh;
+    background: rgba(8,10,10,0.82);
+    border: 1px solid rgba(0,245,160,0.35);
+    box-shadow: 0 0 0 1px rgba(0,245,160,0.08), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,245,160,0.08);
+    border-radius: 6px; overflow: hidden;
+    opacity: 0; transition: opacity 0.6s ease 0.25s, transform 0.6s ease 0.25s;
+  }
+  #idle-hack.show #idle-hack-term { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .idle-hack-titlebar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px; background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(0,245,160,0.18);
+  }
+  .idle-hack-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted2); }
+  .idle-hack-dot:nth-child(1) { background: #ff5f57; }
+  .idle-hack-dot:nth-child(2) { background: #febc2e; }
+  .idle-hack-dot:nth-child(3) { background: #28c840; }
+  .idle-hack-titletext {
+    margin-left: auto; font-size: 0.6rem; letter-spacing: 0.08em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  #idle-hack-lines {
+    padding: 18px 20px; font-family: 'Space Mono', monospace; font-size: 0.72rem;
+    line-height: 1.85; color: var(--accent); white-space: pre-wrap; word-break: break-word;
+    min-height: 200px; max-height: 46vh; overflow: hidden;
+  }
+  #idle-hack-lines .hl-dim { color: var(--muted); }
+  #idle-hack-lines .hl-warn { color: var(--accent3); }
+  #idle-hack-lines .hl-ok { color: var(--accent); font-weight: 700; }
+  #idle-hack-cursor {
+    display: inline-block; width: 7px; height: 1em; background: var(--accent);
+    vertical-align: text-bottom; animation: idleBlink 1s step-end infinite;
+  }
+  @keyframes idleBlink { 50% { opacity: 0; } }
+  #idle-hack-hint {
+    text-align: center; padding: 10px 14px 14px;
+    font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); border-top: 1px solid rgba(255,255,255,0.06);
+    animation: idleHintPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes idleHintPulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { #idle-hack { display: none !important; } }
+
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -561,6 +614,21 @@
 
 <div id="boot-intro">
   <div id="boot-intro-lines"></div>
+</div>
+
+<div id="idle-hack" aria-hidden="true">
+  <canvas id="idle-hack-canvas"></canvas>
+  <div id="idle-hack-term">
+    <div class="idle-hack-titlebar">
+      <span class="idle-hack-dot"></span><span class="idle-hack-dot"></span><span class="idle-hack-dot"></span>
+      <span class="idle-hack-titletext">root@unknown</span>
+    </div>
+    <div id="idle-hack-lines"></div>
+    <div id="idle-hack-hint">
+      <span class="lang-en-i">move your mouse to regain control</span>
+      <span class="lang-ja-i">マウスを動かして操作を取り戻す</span>
+    </div>
+  </div>
 </div>
 
 <div id="cursor-dot"></div>
@@ -1733,6 +1801,185 @@ hamburger.addEventListener('click', function() {
 
   window.addEventListener('resize', function() { moveIndicator(getActiveLink()); });
 })();
+
+// ── IDLE HACK EFFECT ──
+(function() {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var overlay = document.getElementById('idle-hack');
+  var canvas = document.getElementById('idle-hack-canvas');
+  var linesEl = document.getElementById('idle-hack-lines');
+  if (!overlay || !canvas || !linesEl) return;
+  var ctx = canvas.getContext('2d');
+
+  var IDLE_MS = 20000;
+  var idleTimeout = null;
+  var idleShowing = false;
+  var sceneIndex = 0;
+  var idleTimers = [];
+
+  function pushTimer(id) { idleTimers.push(id); }
+  function clearIdleTimers() {
+    idleTimers.forEach(function(id) { clearInterval(id); clearTimeout(id); });
+    idleTimers = [];
+  }
+
+  // -- matrix rain --
+  var fontSize = 15, cols = [], rafId = null;
+  var chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789<>/#{}';
+
+  function resizeMatrix() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var n = Math.ceil(canvas.width / fontSize);
+    cols = new Array(n).fill(0).map(function() { return Math.random() * -100; });
+  }
+  function drawMatrix() {
+    ctx.fillStyle = 'rgba(5,8,8,0.14)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fontSize + 'px monospace';
+    for (var i = 0; i < cols.length; i++) {
+      var ch = chars[Math.floor(Math.random() * chars.length)];
+      ctx.fillStyle = Math.random() < 0.04 ? '#c8ffe8' : 'rgba(0,245,160,0.7)';
+      ctx.fillText(ch, i * fontSize, cols[i] * fontSize);
+      if (cols[i] * fontSize > canvas.height && Math.random() > 0.975) cols[i] = 0;
+      cols[i]++;
+    }
+    rafId = requestAnimationFrame(drawMatrix);
+  }
+  function startMatrix() { resizeMatrix(); cancelAnimationFrame(rafId); drawMatrix(); }
+  function stopMatrix() { cancelAnimationFrame(rafId); if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); }
+  window.addEventListener('resize', function() { if (idleShowing) resizeMatrix(); });
+
+  // -- typed terminal script --
+  function typeLine(container, text, cls, cb, speed) {
+    var el = document.createElement('div');
+    if (cls) el.className = cls;
+    container.appendChild(el);
+    var i = 0;
+    var id = setInterval(function() {
+      el.textContent = text.slice(0, i);
+      i++;
+      if (i > text.length) { clearInterval(id); if (cb) cb(); }
+    }, speed || 22);
+    pushTimer(id);
+  }
+  function pauseThen(ms, cb) { pushTimer(setTimeout(cb, ms)); }
+  function progressLine(container, label, cb) {
+    var el = document.createElement('div');
+    container.appendChild(el);
+    var pct = 0;
+    var id = setInterval(function() {
+      pct += 6 + Math.floor(Math.random() * 10);
+      if (pct > 100) pct = 100;
+      var filled = Math.round(pct / 5);
+      el.textContent = label + ' [' + '█'.repeat(filled) + '░'.repeat(20 - filled) + '] ' + pct + '%';
+      if (pct >= 100) { clearInterval(id); pauseThen(250, cb); }
+    }, 80);
+    pushTimer(id);
+  }
+  function runScript(el, steps, i, onDone) {
+    if (!idleShowing) return;
+    if (i >= steps.length) { onDone(); return; }
+    var s = steps[i];
+    function nextStep() { runScript(el, steps, i + 1, onDone); }
+    if (s.pause) { pauseThen(s.pause, nextStep); return; }
+    if (s.progress) { progressLine(el, s.progress, nextStep); return; }
+    typeLine(el, s.text, s.cls, nextStep, s.speed);
+  }
+
+  var scenes = [
+    [
+      { text: '> initiating remote session...', cls: 'hl-dim' },
+      { pause: 300 },
+      { text: '> target: kaung.dev [tokyo-jp]', cls: 'hl-dim' },
+      { pause: 300 },
+      { progress: 'bypassing firewall' },
+      { text: '> WARNING: intrusion attempt logged', cls: 'hl-warn' },
+      { pause: 400 },
+      { text: '> spoofing trace route... [OK]', cls: 'hl-dim' },
+      { pause: 300 },
+      { text: '> access granted.', cls: 'hl-ok' }
+    ],
+    [
+      { text: 'root@kaung-dev:~$ nmap -sS 10.0.0.0/24', cls: 'hl-dim' },
+      { pause: 250 },
+      { text: 'scanning 254 hosts...', cls: 'hl-dim' },
+      { pause: 300 },
+      { text: 'open ports: 22 80 443 8080', cls: 'hl-dim' },
+      { pause: 250 },
+      { progress: 'exploiting CVE-2024-31337' },
+      { text: 'shell acquired: /bin/bash', cls: 'hl-ok' },
+      { pause: 250 },
+      { text: 'root@kaung-dev:~$ whoami', cls: 'hl-dim' },
+      { text: 'root', cls: 'hl-ok' }
+    ],
+    [
+      { text: '> decrypting core files...', cls: 'hl-dim' },
+      { progress: 'decryption' },
+      { text: '> compiling payload...', cls: 'hl-dim' },
+      { pause: 300 },
+      { text: '> uploading to remote host...', cls: 'hl-dim' },
+      { pause: 250 },
+      { text: '> connection unstable...', cls: 'hl-warn' },
+      { pause: 400 },
+      { text: "> ...just kidding, it's a portfolio site 👋", cls: 'hl-ok' },
+      { pause: 200 },
+      { text: '> nice to meet you.', cls: 'hl-dim' }
+    ]
+  ];
+
+  function runIdleScript() {
+    linesEl.innerHTML = '';
+    var scene = scenes[sceneIndex % scenes.length];
+    sceneIndex++;
+    runScript(linesEl, scene, 0, function() {
+      pauseThen(2400, function() { if (idleShowing) runIdleScript(); });
+    });
+  }
+
+  function scheduleIdle() {
+    clearTimeout(idleTimeout);
+    idleTimeout = setTimeout(triggerIdle, IDLE_MS);
+  }
+  function triggerIdle() {
+    if (document.hidden) { scheduleIdle(); return; }
+    idleShowing = true;
+    overlay.classList.add('show');
+    startMatrix();
+    sceneIndex = 0;
+    runIdleScript();
+  }
+  function cancelIdle() {
+    if (idleShowing) {
+      idleShowing = false;
+      overlay.classList.remove('show');
+      stopMatrix();
+      clearIdleTimers();
+      linesEl.innerHTML = '';
+    }
+    scheduleIdle();
+  }
+
+  ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'scroll'].forEach(function(evt) {
+    window.addEventListener(evt, cancelIdle, { passive: true });
+  });
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      clearTimeout(idleTimeout);
+    } else {
+      clearTimeout(idleTimeout);
+      scheduleIdle();
+    }
+  });
+
+  if (window.__bootDone) {
+    scheduleIdle();
+  } else {
+    window.addEventListener('bootdone', scheduleIdle, { once: true });
+  }
+})();
+
 </script>
 </body>
 </html>
