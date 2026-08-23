@@ -126,7 +126,7 @@
 
   /* NAV */
   nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px 48px;
     background: rgba(10,10,15,0.6);
@@ -307,7 +307,7 @@
   .about-photo-inner { position: relative; aspect-ratio: 3/4; }
   .about-photo-bg {
     position: absolute; inset: 8% 5%;
-    background: radial-gradient(circle 140px at var(--mx, 50%) var(--my, 50%), rgba(0,245,160,0.4), #050505 60%);
+    background: radial-gradient(circle 140px at 50% 50%, rgba(0,245,160,0.4), #050505 60%);
     border: 1px solid var(--border);
     box-shadow: 0 0 16px rgba(0,245,160,0.4), 0 0 34px rgba(0,245,160,0.22);
     transition: background 0.15s ease;
@@ -395,6 +395,13 @@
   .contact-heading { font-family: 'Syne', sans-serif; font-size: clamp(48px,7vw,96px); font-weight: 800; line-height: 0.9; letter-spacing: -0.03em; overflow-wrap: break-word; }
   .contact-heading em { -webkit-text-stroke: 2px var(--accent); color: transparent; font-style: normal; }
   .contact-sub { font-size: 0.75rem; color: var(--muted); line-height: 1.9; margin-top: 24px; max-width: 340px; }
+  .contact-quote {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-style: normal;
+    font-size: 0.95rem; line-height: 1.6; color: var(--text);
+    max-width: 360px; margin-top: 28px; padding-left: 18px;
+    border-left: 2px solid var(--accent);
+  }
+  .contact-quote em { color: var(--accent); font-style: normal; }
   .contact-links { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
   .contact-link { background: var(--bg); padding: 24px 28px; text-decoration: none; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s; }
   .contact-link:hover { background: var(--surface); }
@@ -435,6 +442,13 @@
     opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
   .mobile-drawer.open { opacity: 1; pointer-events: all; }
+  .drawer-close {
+    position: absolute; top: 18px; right: 20px;
+    width: 40px; height: 40px; z-index: 1060;
+    background: none; border: none; color: var(--text);
+    font-size: 2rem; line-height: 1; cursor: pointer;
+  }
+  .drawer-close:hover { color: var(--accent); }
   .mobile-drawer a {
     font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800;
     color: var(--muted); text-decoration: none; padding: 18px 0;
@@ -468,9 +482,19 @@
     section { padding: 72px 20px; }
     .section-header { grid-template-columns: 1fr; gap: 12px; margin-bottom: 48px; }
     .section-label { padding-top: 0; }
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .about-photo { max-width: 280px; margin: 0 auto; }
-    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-grid { display: block; }
+    .about-photo { float: left; width: 130px; margin: 0 20px 12px 0; max-width: none; }
+    .about-photo-cap { font-size: 0.5rem; }
+    .about-text { overflow: hidden; }
+    .about-stats { clear: both; margin-top: 32px; }
+    .contact-grid { grid-template-columns: 1fr auto; align-items: flex-start; gap: 16px; }
+    .contact-links { display: flex; flex-direction: column; gap: 8px; background: transparent; border: none; }
+    .contact-link { justify-content: center; padding: 10px; background: transparent; }
+    .contact-link:hover { background: transparent; }
+    .contact-link-label, .contact-link-val, .contact-arrow { display: none; }
+    .contact-icon-wrap { gap: 0; }
+    .contact-icon { width: 32px; height: 32px; background: transparent; }
+    .contact-icon svg { width: 15px; height: 15px; }
     .projects-grid { grid-template-columns: 1fr 1fr; gap: 1px; }
     .exp-item { grid-template-columns: 1fr; gap: 6px; padding-left: 24px; }
     .hero-scroll { display: none; }
@@ -592,6 +616,7 @@
 
 <!-- MOBILE DRAWER -->
 <div class="mobile-drawer" id="mobileDrawer">
+  <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
   <a href="#why" onclick="closeDrawer()"><span class="lang-en-i">Why IT</span><span class="lang-ja-i">志望理由</span></a>
   <a href="#about" onclick="closeDrawer()"><span class="lang-en-i">About</span><span class="lang-ja-i">自己紹介</span></a>
   <a href="#skills" onclick="closeDrawer()"><span class="lang-en-i">Skills</span><span class="lang-ja-i">スキル</span></a>
@@ -834,105 +859,12 @@
     <div class="projects-grid">
 
       <div class="project-card">
-        <img class="project-img" src="https://img.itch.zone/aW1nLzE1NTUwMzUwLnBuZw==/315x250%23c/3b2V0n.png" alt="Aiueo" onerror="this.style.display='none'">
-        <div class="project-body">
-          <div class="project-num">01</div>
-          <div class="project-title">Aiueo</div>
-          <div class="project-desc"><span class="lang-en">A Japanese hiragana learning game built in Godot. Interactive and playful approach to language education.</span><span class="lang-ja">Godotで制作した平仮名学習ゲーム。楽しく遊びながら日本語を学べる作品。</span></div>
-          <div class="project-tags"><span class="tag">Godot</span><span class="tag">GDScript</span><span class="tag">Education</span></div>
-          <div class="project-links">
-            <a href="https://thedarkcat.itch.io/aiueo" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
-            <!-- TODO: add GitHub repo link if source is public, e.g. <a href="https://github.com/kaungsetlin3013/REPO" target="_blank" class="project-link project-link-secondary">GitHub</a> -->
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <img class="project-img" src="https://img.itch.zone/aW1nLzE1NTQ5NzgwLnBuZw==/315x250%23c/2cSnIo.png" alt="Guess The Color" onerror="this.style.display='none'">
-        <div class="project-body">
-          <div class="project-num">02</div>
-          <div class="project-title">Guess The Color</div>
-          <div class="project-desc"><span class="lang-en">A browser-based color guessing game. Tests visual perception and color knowledge.</span><span class="lang-ja">ブラウザで遊べる色当てゲーム。視覚認識と色彩知識を試す。</span></div>
-          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span></div>
-          <div class="project-links">
-            <a href="https://thedarkcat.itch.io/guess-the-color" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
-            <!-- TODO: add GitHub repo link if source is public -->
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <img class="project-img" src="https://img.itch.zone/aW1nLzE1NTQ5NzMwLnBuZw==/315x250%23c/n0HLkk.png" alt="TicTacToe" onerror="this.style.display='none'">
-        <div class="project-body">
-          <div class="project-num">03</div>
-          <div class="project-title">TicTacToe</div>
-          <div class="project-desc"><span class="lang-en">Classic TicTacToe rebuilt with polished UI. Two-player and vs-AI modes.</span><span class="lang-ja">洗練されたUIで再構築した三目並べ。二人対戦とAI対戦モードを実装。</span></div>
-          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">AI</span></div>
-          <div class="project-links">
-            <a href="https://thedarkcat.itch.io/tictactoe" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
-            <!-- TODO: add GitHub repo link if source is public -->
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a0a2e,#0a1a1f)">
-          <span style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:rgba(0,245,160,0.25)">浦島</span>
-        </div>
-        <div class="project-body">
-          <div class="project-num">04</div>
-          <div class="project-title">Urashima</div>
-          <div class="project-desc"><span class="lang-en">A web-based retelling of the Japanese folk tale Urashima Taro. Interactive narrative experience.</span><span class="lang-ja">日本の民話「浦島太郎」をWebで再現したインタラクティブな物語体験。</span></div>
-          <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">Narrative</span></div>
-          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-          <div class="project-links">
-            <a href="https://kaungsetlin3013.github.io/urashima" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
-            <a href="https://github.com/kaungsetlin3013/urashima" target="_blank" class="project-link project-link-secondary">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-placeholder" style="background:linear-gradient(135deg,#0f1a0f,#1a2a1a)">
-          <span style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:rgba(0,245,160,0.25)">BG · WEB</span>
-        </div>
-        <div class="project-body">
-          <div class="project-num">05</div>
-          <div class="project-title">Change Background Web</div>
-          <div class="project-desc"><span class="lang-en">Dynamic background color changer demonstrating DOM manipulation and interactive event handling.</span><span class="lang-ja">DOM操作とインタラクティブなイベント処理を実演する背景色変更ツール。</span></div>
-          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">DOM</span><span class="tag">CSS</span></div>
-          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-          <div class="project-links">
-            <a href="https://kaungsetlin3013.github.io/ChangeBackgroundWEB" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
-            <a href="https://github.com/kaungsetlin3013/ChangeBackgroundWEB" target="_blank" class="project-link project-link-secondary">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a1000,#2a1a00)">
-          <span style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:rgba(255,107,53,0.3)">PROFILE</span>
-        </div>
-        <div class="project-body">
-          <div class="project-num">06</div>
-          <div class="project-title">School Profile Project</div>
-          <div class="project-desc"><span class="lang-en">A personal profile webpage. Clean layout with responsive design built as a school project.</span><span class="lang-ja">学校のプロジェクトとして制作したプロフィールWebページ。レスポンシブ対応。</span></div>
-          <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">Responsive</span></div>
-          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-          <div class="project-links">
-            <a href="https://kaungsetlin3013.github.io/SchoolProfileProject/myself.html" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
-            <a href="https://github.com/kaungsetlin3013/SchoolProfileProject" target="_blank" class="project-link project-link-secondary">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
         <div class="project-placeholder" style="background:linear-gradient(135deg,#0a1a0f,#0f2a1a);display:flex;align-items:center;justify-content:center;gap:12px">
           <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:rgba(0,245,160,0.3)">SHIFT</span>
           <span style="font-size:1.6rem;opacity:0.4">📋</span>
         </div>
         <div class="project-body">
-          <div class="project-num">07</div>
+          <div class="project-num">01</div>
           <div class="project-title">ShiftLog</div>
           <div class="project-desc">
             <span class="lang-en">A full-featured shift & wage tracker. Manage multiple jobs, auto-calculate night bonuses, export CSV, track monthly bills and taxes — all saved locally.</span>
@@ -948,69 +880,9 @@
       </div>
 
       <div class="project-card">
-        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a0a0a,#2a0f0f);display:flex;align-items:center;justify-content:center;gap:12px">
-          <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:rgba(255,107,53,0.35)">漫画</span>
-          <span style="font-size:1.6rem;opacity:0.4">📚</span>
-        </div>
-        <div class="project-body">
-          <div class="project-num">08</div>
-          <div class="project-title">漫画 Reader</div>
-          <div class="project-desc">
-            <span class="lang-en">A local manga reader with library management. Parses folder names for title, artist & language, supports RTL reading, favourites, zoom, and fullscreen.</span>
-            <span class="lang-ja">ローカルフォルダから漫画を読めるリーダー。タイトル・作者・言語を自動解析。右から左読み、お気に入り、ズーム、全画面表示に対応。</span>
-          </div>
-          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">File API</span><span class="tag">Reader</span></div>
-          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-          <div class="project-links">
-            <a href="https://kaungsetlin3013.github.io/mangaApp/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
-            <a href="https://github.com/kaungsetlin3013/mangaApp" target="_blank" class="project-link project-link-secondary">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-placeholder" style="background:linear-gradient(135deg,#0a0f1a,#0f1a2a);display:flex;align-items:center;justify-content:center;gap:12px">
-          <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:rgba(123,47,255,0.35)">FRAMED</span>
-          <span style="font-size:1.6rem;opacity:0.4">🖼️</span>
-        </div>
-        <div class="project-body">
-          <div class="project-num">09</div>
-          <div class="project-title">Framed — Photo Showcase</div>
-          <div class="project-desc">
-            <span class="lang-en">A local photo gallery app. Drag-and-drop or folder upload, sort by name/size/type, lightbox viewer with random shuffle — no server needed.</span>
-            <span class="lang-ja">ローカル写真ギャラリーアプリ。ドラッグ＆ドロップやフォルダアップロード対応。ライトボックス表示、シャッフル再生など。サーバー不要。</span>
-          </div>
-          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">File API</span><span class="tag">Gallery</span></div>
-          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-          <div class="project-links">
-            <a href="https://kaungsetlin3013.github.io/PhotoShowcase/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
-            <a href="https://github.com/kaungsetlin3013/PhotoShowcase" target="_blank" class="project-link project-link-secondary">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <img class="project-img" src="https://tblg.k-img.com/restaurant/images/Rvw/162579/640x640_rect_162579198.jpg?w=400&h=300&fit=crop" alt="Hiro-chan Ramen" onerror="this.style.display='none'">
-        <div class="project-body">
-          <div class="project-num">10</div>
-          <div class="project-title">Hiro-chan Ramen</div>
-          <div class="project-desc">
-            <span class="lang-en">A bilingual (EN/JA) restaurant website for a real ramen shop in Ikebukuro. Menu, business hours, location — clean and mobile-friendly.</span>
-            <span class="lang-ja">池袋の実在するラーメン屋の英日バイリンガルWebサイト。メニュー、営業時間、場所を掲載。モバイル対応のクリーンなデザイン。</span>
-          </div>
-          <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">Bilingual</span></div>
-          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-          <div class="project-links">
-            <a href="https://kaungsetlin3013.github.io/ramenShop/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
-            <a href="https://github.com/kaungsetlin3013/ramenShop" target="_blank" class="project-link project-link-secondary">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-    <div class="project-card">
         <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="Memories" onerror="this.style.display='none'">
         <div class="project-body">
-          <div class="project-num">11</div>
+          <div class="project-num">02</div>
           <div class="project-title">Memories</div>
           <div class="project-desc"><span class="lang-en">A Supabase-backed photo-sharing app with live camera capture, guest uploads, and a full admin panel for managing photos, devices, and upload limits.</span><span class="lang-ja">Supabaseを使ったフォト共有アプリ。カメラ撮影・ゲストアップロード機能に加え、写真・端末・アップロード制限を管理できる管理者パネルを搭載。</span></div>
           <div class="project-tags"><span class="tag">Supabase</span><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span></div>
@@ -1025,7 +897,7 @@
       <div class="project-card">
         <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="Festival Shop" onerror="this.style.display='none'">
         <div class="project-body">
-          <div class="project-num">12</div>
+          <div class="project-num">03</div>
           <div class="project-title">Festival Shop</div>
           <div class="project-desc"><span class="lang-en">A table-ordering web app for school festivals. Guests enter their table number, browse a customizable menu, and track live order status until it's ready.</span><span class="lang-ja">学園祭向けのテーブルオーダーアプリ。卓番号を入力してメニューを注文し、注文状況をリアルタイムで確認できる。</span></div>
           <div class="project-tags"><span class="tag">Supabase</span><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span></div>
@@ -1038,67 +910,9 @@
 
 
       <div class="project-card">
-        <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="The Reckoning — Hangman" onerror="this.style.display='none'">
-        <div class="project-body">
-          <div class="project-num">13</div>
-          <div class="project-title">The Reckoning — Hangman</div>
-          <div class="project-desc"><span class="lang-en">A gothic-themed number-guessing game with Solo (vs Fate) and Two-Player Duel modes, where players set secret numbers and race to guess correctly first.</span><span class="lang-ja">ゴシック調の数当てゲーム。「運命との対決」ソロモードと2人対戦モードを搭載し、秘密の数字を設定して先に当てた方が勝利。</span></div>
-          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Game</span></div>
-          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-          <div class="project-links">
-            <a href="https://kaungsetlin3013.github.io/hangman/" target="_blank" class="project-link"><span class="lang-en-i">Play Game</span><span class="lang-ja-i">ゲームをプレイ</span></a>
-            <a href="https://github.com/kaungsetlin3013/hangman" target="_blank" class="project-link project-link-secondary">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="project-card">
-        <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="The Reckoning — Tic-Tac-Toe" onerror="this.style.display='none'">
-        <div class="project-body">
-          <div class="project-num">14</div>
-          <div class="project-title">The Reckoning — Tic-Tac-Toe</div>
-          <div class="project-desc"><span class="lang-en">A gothic twist on tic-tac-toe where old marks vanish as the board fills, forcing endless strategy. Play solo against a minimax-powered Oracle or duel a friend.</span><span class="lang-ja">古い印が盤上から消えていくゴシック風三目並べ。ミニマックスAIを搭載した「オラクル」とのソロ対戦、または2人対戦が可能。</span></div>
-          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Game</span></div>
-          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-          <div class="project-links">
-            <a href="https://kaungsetlin3013.github.io/tictactoe/" target="_blank" class="project-link"><span class="lang-en-i">Play Game</span><span class="lang-ja-i">ゲームをプレイ</span></a>
-            <a href="https://github.com/kaungsetlin3013/tictactoe" target="_blank" class="project-link project-link-secondary">GitHub</a>
-          </div>
-        </div>
-      </div>
-
-<div class="project-card">
-  <div class="project-placeholder" style="background:linear-gradient(135deg,#1f122b,#2b121f)">
-    <span style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:rgba(255,107,107,0.25)">漢字</span>
-  </div>
-  <div class="project-body">
-    <div class="project-num">15</div>
-    <div class="project-title">Kanji Quiz</div>
-    <div class="project-desc">
-      <span class="lang-en">An interactive web-based quiz application for practicing and testing your Japanese Kanji knowledge.</span>
-      <span class="lang-ja">日本語の漢字の知識を楽しくテストし、手軽に練習できるインタラクティブなWebクイズアプリ。</span>
-    </div>
-    <div class="project-tags">
-      <span class="tag">HTML/CSS</span>
-      <span class="tag">JavaScript</span>
-      <span class="tag">Education</span>
-    </div>
-    <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
-    <div class="project-links">
-      <a href="https://kaungsetlin3013.github.io/kanjiQuiz/" target="_blank" class="project-link">
-        <span class="lang-en-i">View project</span>
-        <span class="lang-ja-i">プロジェクトを見る</span>
-      </a>
-      <a href="https://github.com/kaungsetlin3013/kanjiQuiz" target="_blank" class="project-link project-link-secondary">GitHub</a>
-    </div>
-  </div>
-</div>
-
-<div class="project-card">
   <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="Inventory Management System" onerror="this.style.display='none'">
   <div class="project-body">
-    <div class="project-num">16</div>
+    <div class="project-num">04</div>
     <div class="project-title">Inventory Management System</div>
     <div class="project-desc">
       <span class="lang-en">
@@ -1125,6 +939,217 @@
 </div>
 
       <div class="project-card">
+        <img class="project-img" src="https://img.itch.zone/aW1nLzE1NTUwMzUwLnBuZw==/315x250%23c/3b2V0n.png" alt="Aiueo" onerror="this.style.display='none'">
+        <div class="project-body">
+          <div class="project-num">05</div>
+          <div class="project-title">Aiueo</div>
+          <div class="project-desc"><span class="lang-en">A Japanese hiragana learning game built in Godot. Interactive and playful approach to language education.</span><span class="lang-ja">Godotで制作した平仮名学習ゲーム。楽しく遊びながら日本語を学べる作品。</span></div>
+          <div class="project-tags"><span class="tag">Godot</span><span class="tag">GDScript</span><span class="tag">Education</span></div>
+          <div class="project-links">
+            <a href="https://thedarkcat.itch.io/aiueo" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+            <!-- TODO: add GitHub repo link if source is public, e.g. <a href="https://github.com/kaungsetlin3013/REPO" target="_blank" class="project-link project-link-secondary">GitHub</a> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img class="project-img" src="https://img.itch.zone/aW1nLzE1NTQ5NzgwLnBuZw==/315x250%23c/2cSnIo.png" alt="Guess The Color" onerror="this.style.display='none'">
+        <div class="project-body">
+          <div class="project-num">06</div>
+          <div class="project-title">Guess The Color</div>
+          <div class="project-desc"><span class="lang-en">A browser-based color guessing game. Tests visual perception and color knowledge.</span><span class="lang-ja">ブラウザで遊べる色当てゲーム。視覚認識と色彩知識を試す。</span></div>
+          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span></div>
+          <div class="project-links">
+            <a href="https://thedarkcat.itch.io/guess-the-color" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+            <!-- TODO: add GitHub repo link if source is public -->
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img class="project-img" src="https://img.itch.zone/aW1nLzE1NTQ5NzMwLnBuZw==/315x250%23c/n0HLkk.png" alt="TicTacToe" onerror="this.style.display='none'">
+        <div class="project-body">
+          <div class="project-num">07</div>
+          <div class="project-title">TicTacToe</div>
+          <div class="project-desc"><span class="lang-en">Classic TicTacToe rebuilt with polished UI. Two-player and vs-AI modes.</span><span class="lang-ja">洗練されたUIで再構築した三目並べ。二人対戦とAI対戦モードを実装。</span></div>
+          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">AI</span></div>
+          <div class="project-links">
+            <a href="https://thedarkcat.itch.io/tictactoe" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+            <!-- TODO: add GitHub repo link if source is public -->
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a0a2e,#0a1a1f)">
+          <span style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:rgba(0,245,160,0.25)">浦島</span>
+        </div>
+        <div class="project-body">
+          <div class="project-num">08</div>
+          <div class="project-title">Urashima</div>
+          <div class="project-desc"><span class="lang-en">A web-based retelling of the Japanese folk tale Urashima Taro. Interactive narrative experience.</span><span class="lang-ja">日本の民話「浦島太郎」をWebで再現したインタラクティブな物語体験。</span></div>
+          <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">Narrative</span></div>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/urashima" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/urashima" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#0f1a0f,#1a2a1a)">
+          <span style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:rgba(0,245,160,0.25)">BG · WEB</span>
+        </div>
+        <div class="project-body">
+          <div class="project-num">09</div>
+          <div class="project-title">Change Background Web</div>
+          <div class="project-desc"><span class="lang-en">Dynamic background color changer demonstrating DOM manipulation and interactive event handling.</span><span class="lang-ja">DOM操作とインタラクティブなイベント処理を実演する背景色変更ツール。</span></div>
+          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">DOM</span><span class="tag">CSS</span></div>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/ChangeBackgroundWEB" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/ChangeBackgroundWEB" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a1000,#2a1a00)">
+          <span style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:rgba(255,107,53,0.3)">PROFILE</span>
+        </div>
+        <div class="project-body">
+          <div class="project-num">10</div>
+          <div class="project-title">School Profile Project</div>
+          <div class="project-desc"><span class="lang-en">A personal profile webpage. Clean layout with responsive design built as a school project.</span><span class="lang-ja">学校のプロジェクトとして制作したプロフィールWebページ。レスポンシブ対応。</span></div>
+          <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">Responsive</span></div>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/SchoolProfileProject/myself.html" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/SchoolProfileProject" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a0a0a,#2a0f0f);display:flex;align-items:center;justify-content:center;gap:12px">
+          <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:rgba(255,107,53,0.35)">漫画</span>
+          <span style="font-size:1.6rem;opacity:0.4">📚</span>
+        </div>
+        <div class="project-body">
+          <div class="project-num">11</div>
+          <div class="project-title">漫画 Reader</div>
+          <div class="project-desc">
+            <span class="lang-en">A local manga reader with library management. Parses folder names for title, artist & language, supports RTL reading, favourites, zoom, and fullscreen.</span>
+            <span class="lang-ja">ローカルフォルダから漫画を読めるリーダー。タイトル・作者・言語を自動解析。右から左読み、お気に入り、ズーム、全画面表示に対応。</span>
+          </div>
+          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">File API</span><span class="tag">Reader</span></div>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/mangaApp/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/mangaApp" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#0a0f1a,#0f1a2a);display:flex;align-items:center;justify-content:center;gap:12px">
+          <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:rgba(123,47,255,0.35)">FRAMED</span>
+          <span style="font-size:1.6rem;opacity:0.4">🖼️</span>
+        </div>
+        <div class="project-body">
+          <div class="project-num">12</div>
+          <div class="project-title">Framed — Photo Showcase</div>
+          <div class="project-desc">
+            <span class="lang-en">A local photo gallery app. Drag-and-drop or folder upload, sort by name/size/type, lightbox viewer with random shuffle — no server needed.</span>
+            <span class="lang-ja">ローカル写真ギャラリーアプリ。ドラッグ＆ドロップやフォルダアップロード対応。ライトボックス表示、シャッフル再生など。サーバー不要。</span>
+          </div>
+          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">File API</span><span class="tag">Gallery</span></div>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/PhotoShowcase/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/PhotoShowcase" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <img class="project-img" src="https://tblg.k-img.com/restaurant/images/Rvw/162579/640x640_rect_162579198.jpg?w=400&h=300&fit=crop" alt="Hiro-chan Ramen" onerror="this.style.display='none'">
+        <div class="project-body">
+          <div class="project-num">13</div>
+          <div class="project-title">Hiro-chan Ramen</div>
+          <div class="project-desc">
+            <span class="lang-en">A bilingual (EN/JA) restaurant website for a real ramen shop in Ikebukuro. Menu, business hours, location — clean and mobile-friendly.</span>
+            <span class="lang-ja">池袋の実在するラーメン屋の英日バイリンガルWebサイト。メニュー、営業時間、場所を掲載。モバイル対応のクリーンなデザイン。</span>
+          </div>
+          <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">Bilingual</span></div>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/ramenShop/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/ramenShop" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    <div class="project-card">
+        <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="The Reckoning — Hangman" onerror="this.style.display='none'">
+        <div class="project-body">
+          <div class="project-num">14</div>
+          <div class="project-title">The Reckoning — Hangman</div>
+          <div class="project-desc"><span class="lang-en">A gothic-themed number-guessing game with Solo (vs Fate) and Two-Player Duel modes, where players set secret numbers and race to guess correctly first.</span><span class="lang-ja">ゴシック調の数当てゲーム。「運命との対決」ソロモードと2人対戦モードを搭載し、秘密の数字を設定して先に当てた方が勝利。</span></div>
+          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Game</span></div>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/hangman/" target="_blank" class="project-link"><span class="lang-en-i">Play Game</span><span class="lang-ja-i">ゲームをプレイ</span></a>
+            <a href="https://github.com/kaungsetlin3013/hangman" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="project-card">
+        <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="The Reckoning — Tic-Tac-Toe" onerror="this.style.display='none'">
+        <div class="project-body">
+          <div class="project-num">15</div>
+          <div class="project-title">The Reckoning — Tic-Tac-Toe</div>
+          <div class="project-desc"><span class="lang-en">A gothic twist on tic-tac-toe where old marks vanish as the board fills, forcing endless strategy. Play solo against a minimax-powered Oracle or duel a friend.</span><span class="lang-ja">古い印が盤上から消えていくゴシック風三目並べ。ミニマックスAIを搭載した「オラクル」とのソロ対戦、または2人対戦が可能。</span></div>
+          <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Game</span></div>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/tictactoe/" target="_blank" class="project-link"><span class="lang-en-i">Play Game</span><span class="lang-ja-i">ゲームをプレイ</span></a>
+            <a href="https://github.com/kaungsetlin3013/tictactoe" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+<div class="project-card">
+  <div class="project-placeholder" style="background:linear-gradient(135deg,#1f122b,#2b121f)">
+    <span style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:rgba(255,107,107,0.25)">漢字</span>
+  </div>
+  <div class="project-body">
+    <div class="project-num">16</div>
+    <div class="project-title">Kanji Quiz</div>
+    <div class="project-desc">
+      <span class="lang-en">An interactive web-based quiz application for practicing and testing your Japanese Kanji knowledge.</span>
+      <span class="lang-ja">日本語の漢字の知識を楽しくテストし、手軽に練習できるインタラクティブなWebクイズアプリ。</span>
+    </div>
+    <div class="project-tags">
+      <span class="tag">HTML/CSS</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">Education</span>
+    </div>
+    <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+    <div class="project-links">
+      <a href="https://kaungsetlin3013.github.io/kanjiQuiz/" target="_blank" class="project-link">
+        <span class="lang-en-i">View project</span>
+        <span class="lang-ja-i">プロジェクトを見る</span>
+      </a>
+      <a href="https://github.com/kaungsetlin3013/kanjiQuiz" target="_blank" class="project-link project-link-secondary">GitHub</a>
+    </div>
+  </div>
+</div>
+
+<div class="project-card">
   <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="Simple Note App" onerror="this.style.display='none'">
   <div class="project-body">
     <div class="project-num">17</div>
@@ -1233,6 +1258,10 @@
         <p class="contact-sub">
           <span class="lang-en">I'm open to backend engineering roles, game dev collaborations, and creative web projects. Let's talk.</span>
           <span class="lang-ja">バックエンドエンジニア職、ゲーム開発のコラボ、Webプロジェクトへの参加を積極的に求めています。ぜひご連絡ください。</span>
+        </p>
+        <p class="contact-quote">
+          <span class="lang-en">"I build systems to be <em>bulletproof</em>, and support teams to be <em>unbreakable</em>."</span>
+          <span class="lang-ja">「システムは<em>壊れないように</em>、チームは<em>崩れないように</em>支える。」</span>
         </p>
         <a href="assets/KaungSetLin履歴書.pdf" download="KaungSetLin履歴書.pdf" class="btn btn-ghost no-magnetic" style="margin-top:28px">
           <span class="lang-en-i">Download Resume / CV</span><span class="lang-ja-i">履歴書・CVをダウンロード</span>
@@ -1718,45 +1747,6 @@ function setLang(lang) {
     aboutPhotoTilt.addEventListener('mouseleave', function() {
       aboutPhotoTilt.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
     });
-
-    // Spotlight: click-and-drag on desktop, same behavior as touch
-    function setSpotFromPoint(x, y) {
-      var rect = aboutPhotoTilt.getBoundingClientRect();
-      var mx = ((x - rect.left) / rect.width) * 100;
-      var my = ((y - rect.top) / rect.height) * 100;
-      mx = Math.max(0, Math.min(100, mx));
-      my = Math.max(0, Math.min(100, my));
-      aboutPhotoTilt.style.setProperty('--mx', mx + '%');
-      aboutPhotoTilt.style.setProperty('--my', my + '%');
-    }
-    function resetSpot() {
-      aboutPhotoTilt.style.setProperty('--mx', '50%');
-      aboutPhotoTilt.style.setProperty('--my', '50%');
-    }
-
-    var isDragging = false;
-    aboutPhotoTilt.addEventListener('mousedown', function(e) {
-      isDragging = true;
-      setSpotFromPoint(e.clientX, e.clientY);
-    });
-    document.addEventListener('mousemove', function(e) {
-      if (isDragging) setSpotFromPoint(e.clientX, e.clientY);
-    });
-    document.addEventListener('mouseup', function() {
-      if (isDragging) {
-        isDragging = false;
-        resetSpot();
-      }
-    });
-
-    // Touch devices: same click-and-drag behavior, using touch points
-    aboutPhotoTilt.addEventListener('touchstart', function(e) {
-      if (e.touches.length) setSpotFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: true });
-    aboutPhotoTilt.addEventListener('touchmove', function(e) {
-      if (e.touches.length) setSpotFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: true });
-    aboutPhotoTilt.addEventListener('touchend', resetSpot);
   }
 })();
 
@@ -1781,6 +1771,11 @@ hamburger.addEventListener('click', function() {
     document.body.style.overflow = 'hidden';
   }
 });
+
+var drawerClose = document.getElementById('drawerClose');
+if (drawerClose) {
+  drawerClose.addEventListener('click', closeDrawer);
+}
 
 // ── NAV ACTIVE ──
 (function() {
