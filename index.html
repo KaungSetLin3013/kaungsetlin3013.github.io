@@ -306,14 +306,10 @@
   .about-photo-inner { position: relative; aspect-ratio: 3/4; }
   .about-photo-bg {
     position: absolute; inset: 8% 5%;
-    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(0,245,160,0.4), #050505 60%);
+    background: radial-gradient(circle 140px at var(--mx, 50%) var(--my, 50%), rgba(0,245,160,0.4), #050505 60%);
     border: 1px solid var(--border);
+    box-shadow: 0 0 16px rgba(0,245,160,0.4), 0 0 34px rgba(0,245,160,0.22);
     transition: background 0.15s ease;
-    animation: bgGlowPulse 2.4s ease-in-out infinite;
-  }
-  @keyframes bgGlowPulse {
-    0%, 100% { box-shadow: 0 0 12px rgba(0,245,160,0.35), 0 0 26px rgba(0,245,160,0.18); }
-    50%      { box-shadow: 0 0 22px rgba(0,245,160,0.7), 0 0 48px rgba(0,245,160,0.4); }
   }
   .about-photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: bottom; transition: transform 0.2s ease-out; }
 
@@ -495,6 +491,8 @@
     .contact-heading { font-size: clamp(34px, 11vw, 52px); }
     .exp-role { font-size: 1rem; }
     .btn { padding: 12px 22px; font-size: 0.6rem; }
+    .hero-cta { gap: 10px; }
+    .hero-cta .btn { padding: 10px 16px; font-size: 0.54rem; letter-spacing: 0.12em; }
     footer { padding: 20px 16px; }
   }
 
@@ -1705,16 +1703,44 @@ function setLang(lang) {
       aboutPhotoTilt.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
     });
 
-    // Spotlight tracks the cursor across the whole page, not just while hovering the frame
-    document.addEventListener('mousemove', function(e) {
+    // Spotlight: click-and-drag on desktop, same behavior as touch
+    function setSpotFromPoint(x, y) {
       var rect = aboutPhotoTilt.getBoundingClientRect();
-      var mx = ((e.clientX - rect.left) / rect.width) * 100;
-      var my = ((e.clientY - rect.top) / rect.height) * 100;
-      mx = Math.max(-40, Math.min(140, mx));
-      my = Math.max(-40, Math.min(140, my));
+      var mx = ((x - rect.left) / rect.width) * 100;
+      var my = ((y - rect.top) / rect.height) * 100;
+      mx = Math.max(0, Math.min(100, mx));
+      my = Math.max(0, Math.min(100, my));
       aboutPhotoTilt.style.setProperty('--mx', mx + '%');
       aboutPhotoTilt.style.setProperty('--my', my + '%');
+    }
+    function resetSpot() {
+      aboutPhotoTilt.style.setProperty('--mx', '50%');
+      aboutPhotoTilt.style.setProperty('--my', '50%');
+    }
+
+    var isDragging = false;
+    aboutPhotoTilt.addEventListener('mousedown', function(e) {
+      isDragging = true;
+      setSpotFromPoint(e.clientX, e.clientY);
     });
+    document.addEventListener('mousemove', function(e) {
+      if (isDragging) setSpotFromPoint(e.clientX, e.clientY);
+    });
+    document.addEventListener('mouseup', function() {
+      if (isDragging) {
+        isDragging = false;
+        resetSpot();
+      }
+    });
+
+    // Touch devices: same click-and-drag behavior, using touch points
+    aboutPhotoTilt.addEventListener('touchstart', function(e) {
+      if (e.touches.length) setSpotFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    aboutPhotoTilt.addEventListener('touchmove', function(e) {
+      if (e.touches.length) setSpotFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+    aboutPhotoTilt.addEventListener('touchend', resetSpot);
   }
 })();
 
