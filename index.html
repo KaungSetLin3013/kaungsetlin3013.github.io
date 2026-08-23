@@ -115,60 +115,7 @@
     width: min(85vw, 420px); min-height: 4.5em; text-align: left;
   }
 
-  /* IDLE HACK EFFECT */
-  #idle-hack {
-    position: fixed; inset: 0; z-index: 99990;
-    background: rgba(5,5,8,0.88);
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.9s ease;
-  }
-  #idle-hack.show { opacity: 1; pointer-events: auto; }
-  #idle-hack-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-  #idle-hack-term {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.97);
-    width: min(90vw, 560px); max-height: 70vh;
-    background: rgba(8,10,10,0.82);
-    border: 1px solid rgba(0,245,160,0.35);
-    box-shadow: 0 0 0 1px rgba(0,245,160,0.08), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(0,245,160,0.08);
-    border-radius: 6px; overflow: hidden;
-    opacity: 0; transition: opacity 0.6s ease 0.25s, transform 0.6s ease 0.25s;
-  }
-  #idle-hack.show #idle-hack-term { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  .idle-hack-titlebar {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 14px; background: rgba(255,255,255,0.03);
-    border-bottom: 1px solid rgba(0,245,160,0.18);
-  }
-  .idle-hack-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted2); }
-  .idle-hack-dot:nth-child(1) { background: #ff5f57; }
-  .idle-hack-dot:nth-child(2) { background: #febc2e; }
-  .idle-hack-dot:nth-child(3) { background: #28c840; }
-  .idle-hack-titletext {
-    margin-left: auto; font-size: 0.6rem; letter-spacing: 0.08em;
-    color: var(--muted); text-transform: uppercase;
-  }
-  #idle-hack-lines {
-    padding: 18px 20px; font-family: 'Space Mono', monospace; font-size: 0.72rem;
-    line-height: 1.85; color: var(--accent); white-space: pre-wrap; word-break: break-word;
-    min-height: 200px; max-height: 46vh; overflow: hidden;
-  }
-  #idle-hack-lines .hl-dim { color: var(--muted); }
-  #idle-hack-lines .hl-warn { color: var(--accent3); }
-  #idle-hack-lines .hl-ok { color: var(--accent); font-weight: 700; }
-  #idle-hack-cursor {
-    display: inline-block; width: 7px; height: 1em; background: var(--accent);
-    vertical-align: text-bottom; animation: idleBlink 1s step-end infinite;
-  }
-  @keyframes idleBlink { 50% { opacity: 0; } }
-  #idle-hack-hint {
-    text-align: center; padding: 10px 14px 14px;
-    font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--muted); border-top: 1px solid rgba(255,255,255,0.06);
-    animation: idleHintPulse 2.4s ease-in-out infinite;
-  }
-  @keyframes idleHintPulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
-  @media (prefers-reduced-motion: reduce) { #idle-hack { display: none !important; } }
-
+  /* NOISE */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -180,7 +127,7 @@
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
     display: flex; align-items: center; justify-content: space-between;
-    padding: clamp(12px, 2vw, 16px) clamp(16px, 5vw, 48px);
+    padding: 16px 48px;
     background: rgba(10,10,15,0.6);
     backdrop-filter: blur(24px);
     border-bottom: 1px solid var(--border);
@@ -231,8 +178,7 @@
   /* HERO */
   .hero {
     min-height: 100vh; min-height: 100dvh; display: flex; align-items: center;
-    padding: clamp(88px, 14vw, 120px) clamp(16px, 5vw, 48px) clamp(48px, 8vw, 80px);
-    position: relative; overflow: hidden;
+    padding: 120px 48px 80px; position: relative; overflow: hidden;
   }
   .hero-grid {
     position: absolute; inset: 0; pointer-events: none;
@@ -242,21 +188,13 @@
     background-size: 60px 60px;
   }
   .hero-shapes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-  .hero-shapes .shape-wrap {
-    position: absolute; transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
-    will-change: transform;
-  }
   .hero-shapes span {
-    display: block; width: 100%; height: 100%;
-    border: 1px solid rgba(0,245,160,0.08); border-radius: 50%;
+    position: absolute; border: 1px solid rgba(0,245,160,0.08); border-radius: 50%;
     animation: floatS 12s ease-in-out infinite;
   }
-  .hero-shapes .shape-wrap:nth-child(1) { width:400px;height:400px;top:-100px;right:-100px; }
-  .hero-shapes .shape-wrap:nth-child(1) span { animation-duration:14s; }
-  .hero-shapes .shape-wrap:nth-child(2) { width:200px;height:200px;bottom:20%;right:25%; }
-  .hero-shapes .shape-wrap:nth-child(2) span { animation-duration:10s;animation-delay:-4s;border-color:rgba(123,47,255,0.08); }
-  .hero-shapes .shape-wrap:nth-child(3) { width:80px;height:80px;top:30%;left:10%; }
-  .hero-shapes .shape-wrap:nth-child(3) span { animation-duration:8s;animation-delay:-2s;border-color:rgba(255,107,53,0.1); }
+  .hero-shapes span:nth-child(1) { width:400px;height:400px;top:-100px;right:-100px;animation-duration:14s; }
+  .hero-shapes span:nth-child(2) { width:200px;height:200px;bottom:20%;right:25%;animation-duration:10s;animation-delay:-4s;border-color:rgba(123,47,255,0.08); }
+  .hero-shapes span:nth-child(3) { width:80px;height:80px;top:30%;left:10%;animation-duration:8s;animation-delay:-2s;border-color:rgba(255,107,53,0.1); }
   @keyframes floatS { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-20px) rotate(10deg)} }
 
   .hero-content { position: relative; max-width: 900px; }
@@ -290,9 +228,9 @@
   }
   .hero-name {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(40px, 13vw, 130px);
+    font-size: clamp(64px, 10vw, 130px);
     font-weight: 800; line-height: 0.9; letter-spacing: -0.03em;
-    margin-bottom: clamp(20px, 4vw, 32px); animation: fadeUp 0.6s 0.1s ease both;
+    margin-bottom: 32px; animation: fadeUp 0.6s 0.1s ease both;
   }
   .hero-name span { -webkit-text-stroke: 2px var(--accent); color: transparent; display: block; }
   .hero-role {
@@ -318,6 +256,14 @@
     max-width: 540px; margin-bottom: 48px; animation: fadeUp 0.6s 0.3s ease both;
   }
   .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp 0.6s 0.4s ease both; }
+  .hero-focus {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 28px; padding: 10px 16px;
+    border: 1px solid var(--border); border-left: 2px solid var(--accent);
+    font-size: 0.62rem; letter-spacing: 0.04em; color: var(--muted);
+    max-width: 560px; animation: fadeUp 0.6s 0.55s ease both;
+  }
+  .hero-focus-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; animation: pulse 2s ease-in-out infinite; }
   .btn {
     text-decoration: none; font-family: 'Space Mono', monospace;
     font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
@@ -337,7 +283,7 @@
   @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
   /* SECTIONS */
-  section { padding: clamp(56px, 10vw, 120px) clamp(16px, 5vw, 48px); }
+  section { padding: 120px 48px; }
   .section-inner { max-width: 1100px; margin: 0 auto; }
   .section-header { display: grid; grid-template-columns: auto 1fr; align-items: start; gap: 40px; margin-bottom: 80px; }
   .section-label { font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); padding-top: 6px; white-space: nowrap; }
@@ -346,8 +292,7 @@
 
   /* ABOUT */
   .about-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .about-grid { display: grid; grid-template-columns: 280px 1fr; gap: 56px; align-items: start; }
-  .about-main { display: flex; flex-direction: column; gap: 40px; }
+  .about-grid { display: grid; grid-template-columns: 240px 1fr 1fr; gap: 48px; align-items: start; }
   .about-photo { position: relative; }
   .about-photo-tilt {
     position: relative; transition: transform 0.3s ease;
@@ -374,11 +319,11 @@
 
   .about-photo-cap { font-size: 0.55rem; letter-spacing: 0.15em; color: var(--muted2); text-transform: uppercase; margin-top: 14px; }
   .about-photo-cap::before { content: '// '; opacity: 0.5; }
-  .about-text p { font-size: 0.8rem; line-height: 1.95; color: var(--muted); margin-bottom: 20px; max-width: 640px; }
+  .about-text p { font-size: 0.75rem; line-height: 1.9; color: var(--muted); margin-bottom: 20px; }
   .about-text p strong { color: var(--text); }
-  .about-stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-  .stat { background: var(--surface); padding: 24px 20px; }
-  .stat-num { font-family: 'Syne', sans-serif; font-size: clamp(30px, 6vw, 48px); font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .stat { background: var(--surface); padding: 32px; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 8px; }
   .stat-label { font-size: 0.6rem; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
 
   /* SKILLS */
@@ -395,9 +340,6 @@
   /* PROJECTS */
   .projects-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
-  /* fill the last row cleanly whether 1 or 2 cards are left over */
-  .project-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; }
-  .project-card:last-child:nth-child(3n+2) { grid-column: span 2; }
   .project-card {
     background: var(--bg); overflow: hidden; opacity: 0; transform: translateY(16px);
     transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s;
@@ -417,9 +359,9 @@
   @keyframes spinBorder { to { --angle: 360deg; } }
   .project-card.visible { opacity: 1; transform: translateY(0); }
   .project-card:hover { background: var(--surface); }
-  .project-card { cursor: pointer; }
   .project-img { width: 100%; height: 180px; object-fit: cover; display: block; filter: grayscale(30%); transition: filter 0.3s; }
   .project-card:hover .project-img { filter: grayscale(0%); }
+  .project-placeholder { height: 180px; display: flex; align-items: center; justify-content: center; }
   .project-body { padding: 28px; }
   .project-num { font-size: 0.55rem; color: var(--muted2); letter-spacing: 0.2em; margin-bottom: 12px; }
   .project-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; line-height: 1.2; }
@@ -427,6 +369,11 @@
   .project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
   .tag { font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 3px 10px; border: 1px solid var(--border); color: var(--muted); border-radius: 1px; }
   .project-link { text-decoration: none; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+  .project-links { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+  .project-link-secondary { color: var(--muted); }
+  .project-link-secondary::after { content: '↗'; }
+  .project-link-secondary:hover { color: var(--text); }
+  .project-note { display: inline-block; font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 10px; border: 1px solid rgba(0,245,160,0.3); color: var(--accent); background: rgba(0,245,160,0.06); margin-bottom: 14px; }
   .project-link::after { content: '→'; transition: transform 0.2s; }
   .project-link:hover::after { transform: translateX(4px); }
 
@@ -514,36 +461,37 @@
 .about-text a:hover { border-color: var(--accent); }
   
   @media (max-width: 900px) {
+    nav { padding: 14px 20px; }
     .nav-links { display: none; }
     .lang-toggle { display: none; }
     .hamburger { display: flex; }
     .mobile-drawer { display: flex; }
     /* keep cursor on desktop, only hide on touch */
+    .hero { padding: 100px 20px 60px; }
+    section { padding: 72px 20px; }
     .section-header { grid-template-columns: 1fr; gap: 12px; margin-bottom: 48px; }
     .section-label { padding-top: 0; }
     .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .about-photo { max-width: 320px; width: 70%; margin: 0 auto; }
+    .about-photo { max-width: 280px; margin: 0 auto; }
     .contact-grid { grid-template-columns: 1fr; gap: 40px; }
     .projects-grid { grid-template-columns: 1fr 1fr; gap: 1px; }
-    .project-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
-    .about-stats { grid-template-columns: repeat(3, 1fr); }
-    .stat:last-child:nth-child(3n+1) { grid-column: 1 / -1; }
-    .stat:last-child:nth-child(3n+2) { grid-column: span 2; }
     .exp-item { grid-template-columns: 1fr; gap: 6px; padding-left: 24px; }
     .hero-scroll { display: none; }
     footer { flex-direction: column; gap: 8px; text-align: center; padding: 24px 20px; }
   }
   @media (max-width: 600px) {
+    nav { padding: 12px 16px; }
+    .hero { padding: 88px 16px 48px; }
+    .hero-name { font-size: 48px; }
     .hero-tag { font-size: 0.52rem; padding: 5px 12px; }
     .hero-desc { font-size: 0.72rem; }
     .hero-typewriter { font-size: 0.68rem; margin-bottom: 20px; }
+    section { padding: 60px 16px; }
     .projects-grid { grid-template-columns: 1fr; }
-    .about-stats { grid-template-columns: 1fr 1fr; }
-    .stat:last-child:nth-child(odd) { grid-column: 1 / -1; }
     .project-img { height: 160px; }
     .project-body { padding: 20px; }
     .stat { padding: 20px; }
-    .stat-num { font-size: 30px; }
+    .stat-num { font-size: 36px; }
     .contact-heading { font-size: clamp(34px, 11vw, 52px); }
     .exp-role { font-size: 1rem; }
     .btn { padding: 12px 22px; font-size: 0.6rem; }
@@ -616,21 +564,6 @@
   <div id="boot-intro-lines"></div>
 </div>
 
-<div id="idle-hack" aria-hidden="true">
-  <canvas id="idle-hack-canvas"></canvas>
-  <div id="idle-hack-term">
-    <div class="idle-hack-titlebar">
-      <span class="idle-hack-dot"></span><span class="idle-hack-dot"></span><span class="idle-hack-dot"></span>
-      <span class="idle-hack-titletext">root@unknown</span>
-    </div>
-    <div id="idle-hack-lines"></div>
-    <div id="idle-hack-hint">
-      <span class="lang-en-i">move your mouse to regain control</span>
-      <span class="lang-ja-i">マウスを動かして操作を取り戻す</span>
-    </div>
-  </div>
-</div>
-
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 
@@ -675,11 +608,7 @@
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-grid"></div>
-  <div class="hero-shapes">
-    <div class="shape-wrap" data-depth="0.5"><span></span></div>
-    <div class="shape-wrap" data-depth="1"><span></span></div>
-    <div class="shape-wrap" data-depth="1.6"><span></span></div>
-  </div>
+  <div class="hero-shapes"><span></span><span></span><span></span></div>
   <div class="hero-content">
     <div class="hero-tag">
       <span class="lang-en-i">Available for opportunities</span>
@@ -701,9 +630,17 @@
       <a href="#projects" class="btn btn-primary">
         <span class="lang-en-i">View Projects</span><span class="lang-ja-i">プロジェクトを見る</span>
       </a>
+      <a href="assets/resume.pdf" download class="btn btn-ghost no-magnetic">
+        <span class="lang-en-i">Download Resume</span><span class="lang-ja-i">履歴書をダウンロード</span>
+      </a>
       <a href="https://github.com/kaungsetlin3013" target="_blank" class="btn btn-ghost no-magnetic">
         <span class="lang-en-i">Get in Touch</span><span class="lang-ja-i">お問い合わせ</span>
       </a>
+    </div>
+    <div class="hero-focus">
+      <span class="hero-focus-dot"></span>
+      <span class="lang-en-i">Current Focus: Advanced backend architecture, system reliability, and exploring automotive software / embedded concepts.</span>
+      <span class="lang-ja-i">現在の注力分野：高度なバックエンド設計、システムの信頼性、車載・組み込みソフトウェア領域の探求。</span>
     </div>
   </div>
   <div class="hero-scroll">
@@ -797,28 +734,25 @@
         </div>
         <div class="about-photo-cap"><span class="lang-en-i">Tokyo, Japan</span><span class="lang-ja-i">東京、日本</span></div>
       </div>
-      <div class="about-main">
-        <div class="about-text reveal">
-          <p>
-            <span class="lang-en">I'm a developer from Myanmar, currently living in Toshima, Tokyo. My journey into tech started from childhood curiosity about games — wanting to understand how they worked, then how to build them myself.</span>
-            <span class="lang-ja">ミャンマー出身のエンジニアで、現在は東京都豊島区に住んでいます。幼少期からゲームへの好奇心があり、「どうやって動くのか」「自分で作れるか」という疑問がIT・技術への入り口となりました。</span>
-          </p>
-         <p>
-            <span class="lang-en">I worked as a backend developer at <a href="https://visibleone.com/" target="_blank" rel="noopener noreferrer"><strong>Visible One</strong></a>, building server-side systems in production. Today I'm deepening my Japanese and engineering foundations at Tokyo Welfare and Childcare Professional School.</span>
-            <span class="lang-ja"><a href="https://visibleone.com/" target="_blank" rel="noopener noreferrer"><strong>Visible One</strong></a>でバックエンドエンジニアとして働き、プロダクション環境のサーバーサイドシステムを構築しました。現在は東京福祉保育専門学校でITと日本語の基礎をさらに深めています。</span>
-          </p>
-          <p>
-            <span class="lang-en">I believe in quiet persistence — learning every day, building things properly, staying humble enough to keep growing. I thrive in teams where trust is earned through contribution.</span>
-            <span class="lang-ja">「地道に続けること」を大切にしています。毎日学び、丁寧に物をつくり、成長し続けるために謙虚でいること。貢献によって信頼を築けるチームで力を発揮できます。</span>
-          </p>
-        </div>
-        <div class="about-stats reveal">
-          <div class="stat"><div class="stat-num">3+</div><div class="stat-label"><span class="lang-en-i">Years experience</span><span class="lang-ja-i">年の経験</span></div></div>
-          <div class="stat"><div class="stat-num">11</div><div class="stat-label"><span class="lang-en-i">Projects created</span><span class="lang-ja-i">制作プロジェクト</span></div></div>
-          <div class="stat"><div class="stat-num">3</div><div class="stat-label"><span class="lang-en-i">Apps</span><span class="lang-ja-i">アプリ</span></div></div>
-          <div class="stat"><div class="stat-num">3</div><div class="stat-label"><span class="lang-en-i">Languages spoken</span><span class="lang-ja-i">話せる言語</span></div></div>
-          <div class="stat"><div class="stat-num">∞</div><div class="stat-label"><span class="lang-en-i">Curiosity level</span><span class="lang-ja-i">好奇心レベル</span></div></div>
-        </div>
+      <div class="about-text reveal">
+        <p>
+          <span class="lang-en">I'm a developer from Myanmar, currently living in Toshima, Tokyo. My journey into tech started from childhood curiosity about games — wanting to understand how they worked, then how to build them myself.</span>
+          <span class="lang-ja">ミャンマー出身のエンジニアで、現在は東京都豊島区に住んでいます。幼少期からゲームへの好奇心があり、「どうやって動くのか」「自分で作れるか」という疑問がIT・技術への入り口となりました。</span>
+        </p>
+       <p>
+          <span class="lang-en">I worked as a backend developer at <a href="https://visibleone.com/" target="_blank" rel="noopener noreferrer"><strong>Visible One</strong></a>, building server-side systems in production. Today I'm deepening my Japanese and engineering foundations at Tokyo Welfare and Childcare Professional School.</span>
+          <span class="lang-ja"><a href="https://visibleone.com/" target="_blank" rel="noopener noreferrer"><strong>Visible One</strong></a>でバックエンドエンジニアとして働き、プロダクション環境のサーバーサイドシステムを構築しました。現在は東京福祉保育専門学校でITと日本語の基礎をさらに深めています。</span>
+        </p>
+        <p>
+          <span class="lang-en">I believe in quiet persistence — learning every day, building things properly, staying humble enough to keep growing. I thrive in teams where trust is earned through contribution.</span>
+          <span class="lang-ja">「地道に続けること」を大切にしています。毎日学び、丁寧に物をつくり、成長し続けるために謙虚でいること。貢献によって信頼を築けるチームで力を発揮できます。</span>
+        </p>
+      </div>
+      <div class="about-stats reveal">
+        <div class="stat"><div class="stat-num">3+</div><div class="stat-label"><span class="lang-en-i">Years experience</span><span class="lang-ja-i">年の経験</span></div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-label"><span class="lang-en-i">Projects shipped</span><span class="lang-ja-i">制作プロジェクト</span></div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label"><span class="lang-en-i">Languages spoken</span><span class="lang-ja-i">話せる言語</span></div></div>
+        <div class="stat"><div class="stat-num">∞</div><div class="stat-label"><span class="lang-en-i">Curiosity level</span><span class="lang-ja-i">好奇心レベル</span></div></div>
       </div>
     </div>
   </div>
@@ -833,7 +767,7 @@
     </div>
     <!-- skill badge helper -->
     <style>
-      .skill-badge { display:inline-block; font-size:0.48rem; letter-spacing:0.1em; text-transform:uppercase; padding:2px 8px; border-radius:10px; margin-top:8px; border:1px solid rgba(0,245,160,0.35); color:var(--accent); background:rgba(0,245,160,0.06); }
+      .skill-badge { display:inline-block; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; padding:4px 11px; border-radius:10px; margin-top:2px; margin-bottom:8px; border:1px solid rgba(0,245,160,0.35); color:var(--accent); background:rgba(0,245,160,0.06); }
       .skill-badge.cert { border-color:rgba(123,47,255,0.4); color:#9d6fff; background:rgba(123,47,255,0.07); }
       .skill-sub { font-size:0.55rem; color:var(--muted2); margin-top:6px; margin-bottom:2px; }
     </style>
@@ -841,66 +775,50 @@
 
       <div class="skill-item" style="--w:88%">
         <div class="skill-name">Python</div>
-        <div class="skill-bar"><div class="skill-fill"></div></div>
-        <div class="skill-pct">88%</div>
-        <div class="skill-sub"><span class="lang-en-i">2 yrs professional use — Visible One</span><span class="lang-ja-i">Visible Oneで２年間業務使用</span></div>
-        <span class="skill-badge"><span class="lang-en-i">Work Experience</span><span class="lang-ja-i">実務経験</span></span>
+        <span class="skill-badge"><span class="lang-en-i">Work Experience</span>
+        <div class="skill-sub"><span class="lang-en-i">2 yrs professional use — Visible One</span><span class="lang-ja-i">Visible Oneで２年間業務使用</span></div><span class="lang-ja-i">実務経験</span></span>
       </div>
 
       <div class="skill-item" style="--w:82%">
         <div class="skill-name">JavaScript</div>
-        <div class="skill-bar"><div class="skill-fill"></div></div>
-        <div class="skill-pct">82%</div>
-        <div class="skill-sub"><span class="lang-en-i">Strong personal projects & web dev</span><span class="lang-ja-i">個人プロジェクト・Web開発で習得</span></div>
-        <span class="skill-badge"><span class="lang-en-i">Proficient</span><span class="lang-ja-i">得意</span></span>
+        <span class="skill-badge"><span class="lang-en-i">Proficient</span>
+        <div class="skill-sub"><span class="lang-en-i">Strong personal projects & web dev</span><span class="lang-ja-i">個人プロジェクト・Web開発で習得</span></div><span class="lang-ja-i">得意</span></span>
       </div>
 
       <div class="skill-item" style="--w:78%">
         <div class="skill-name">C Language</div>
-        <div class="skill-bar"><div class="skill-fill"></div></div>
-        <div class="skill-pct">78%</div>
-        <div class="skill-sub"><span class="lang-en-i">Certified — Grade 3</span><span class="lang-ja-i">C言語検定３級取得</span></div>
-        <span class="skill-badge cert"><span class="lang-en-i">Certified Lv.3</span><span class="lang-ja-i">３級認定</span></span>
+        <span class="skill-badge cert"><span class="lang-en-i">Certified Lv.3</span>
+        <div class="skill-sub"><span class="lang-en-i">Certified — Grade 3</span><span class="lang-ja-i">C言語検定３級取得</span></div><span class="lang-ja-i">３級認定</span></span>
       </div>
 
       <div class="skill-item" style="--w:72%">
         <div class="skill-name">MySQL</div>
-        <div class="skill-bar"><div class="skill-fill"></div></div>
-        <div class="skill-pct">72%</div>
-        <div class="skill-sub"><span class="lang-en-i">Used in backend work at Visible One</span><span class="lang-ja-i">バックエンド業務で実務使用</span></div>
-        <span class="skill-badge"><span class="lang-en-i">Work Experience</span><span class="lang-ja-i">実務経験</span></span>
+        <span class="skill-badge"><span class="lang-en-i">Work Experience</span>
+        <div class="skill-sub"><span class="lang-en-i">Used in backend work at Visible One</span><span class="lang-ja-i">バックエンド業務で実務使用</span></div><span class="lang-ja-i">実務経験</span></span>
       </div>
 
       <div class="skill-item" style="--w:68%">
         <div class="skill-name">Linux</div>
-        <div class="skill-bar"><div class="skill-fill"></div></div>
-        <div class="skill-pct">68%</div>
-        <div class="skill-sub"><span class="lang-en-i">Server environment, backend ops</span><span class="lang-ja-i">サーバー環境・バックエンド運用</span></div>
-        <span class="skill-badge"><span class="lang-en-i">Work Experience</span><span class="lang-ja-i">実務経験</span></span>
+        <span class="skill-badge"><span class="lang-en-i">Work Experience</span>
+        <div class="skill-sub"><span class="lang-en-i">Server environment, backend ops</span><span class="lang-ja-i">サーバー環境・バックエンド運用</span></div><span class="lang-ja-i">実務経験</span></span>
       </div>
 
       <div class="skill-item" style="--w:65%">
         <div class="skill-name">HTML / CSS</div>
-        <div class="skill-bar"><div class="skill-fill"></div></div>
-        <div class="skill-pct">65%</div>
-        <div class="skill-sub"><span class="lang-en-i">Web projects & portfolio work</span><span class="lang-ja-i">Webプロジェクト・ポートフォリオで使用</span></div>
-        <span class="skill-badge"><span class="lang-en-i">Proficient</span><span class="lang-ja-i">得意</span></span>
+        <span class="skill-badge"><span class="lang-en-i">Proficient</span>
+        <div class="skill-sub"><span class="lang-en-i">Web projects & portfolio work</span><span class="lang-ja-i">Webプロジェクト・ポートフォリオで使用</span></div><span class="lang-ja-i">得意</span></span>
       </div>
 
       <div class="skill-item" style="--w:55%">
         <div class="skill-name">Java</div>
-        <div class="skill-bar"><div class="skill-fill"></div></div>
-        <div class="skill-pct">55%</div>
-        <div class="skill-sub"><span class="lang-en-i">Studied in 2nd year of university</span><span class="lang-ja-i">大学２年次に学習</span></div>
-        <span class="skill-badge"><span class="lang-en-i">Academic</span><span class="lang-ja-i">学習済み</span></span>
+        <span class="skill-badge"><span class="lang-en-i">Academic</span>
+        <div class="skill-sub"><span class="lang-en-i">Studied in 2nd year of university</span><span class="lang-ja-i">大学２年次に学習</span></div><span class="lang-ja-i">学習済み</span></span>
       </div>
 
       <div class="skill-item" style="--w:80%">
         <div class="skill-name">GDScript / Godot</div>
-        <div class="skill-bar"><div class="skill-fill"></div></div>
-        <div class="skill-pct">80%</div>
-        <div class="skill-sub"><span class="lang-en-i">Game projects — itch.io releases</span><span class="lang-ja-i">ゲーム制作・itch.ioで公開</span></div>
-        <span class="skill-badge"><span class="lang-en-i">Shipped Projects</span><span class="lang-ja-i">リリース済み</span></span>
+        <span class="skill-badge"><span class="lang-en-i">Shipped Projects</span>
+        <div class="skill-sub"><span class="lang-en-i">Game projects — itch.io releases</span><span class="lang-ja-i">ゲーム制作・itch.ioで公開</span></div><span class="lang-ja-i">リリース済み</span></span>
       </div>
 
     </div>
@@ -923,7 +841,10 @@
           <div class="project-title">Aiueo</div>
           <div class="project-desc"><span class="lang-en">A Japanese hiragana learning game built in Godot. Interactive and playful approach to language education.</span><span class="lang-ja">Godotで制作した平仮名学習ゲーム。楽しく遊びながら日本語を学べる作品。</span></div>
           <div class="project-tags"><span class="tag">Godot</span><span class="tag">GDScript</span><span class="tag">Education</span></div>
-          <a href="https://thedarkcat.itch.io/aiueo" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+          <div class="project-links">
+            <a href="https://thedarkcat.itch.io/aiueo" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+            <!-- TODO: add GitHub repo link if source is public, e.g. <a href="https://github.com/kaungsetlin3013/REPO" target="_blank" class="project-link project-link-secondary">GitHub</a> -->
+          </div>
         </div>
       </div>
 
@@ -934,7 +855,10 @@
           <div class="project-title">Guess The Color</div>
           <div class="project-desc"><span class="lang-en">A browser-based color guessing game. Tests visual perception and color knowledge.</span><span class="lang-ja">ブラウザで遊べる色当てゲーム。視覚認識と色彩知識を試す。</span></div>
           <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span></div>
-          <a href="https://thedarkcat.itch.io/guess-the-color" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+          <div class="project-links">
+            <a href="https://thedarkcat.itch.io/guess-the-color" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+            <!-- TODO: add GitHub repo link if source is public -->
+          </div>
         </div>
       </div>
 
@@ -945,41 +869,69 @@
           <div class="project-title">TicTacToe</div>
           <div class="project-desc"><span class="lang-en">Classic TicTacToe rebuilt with polished UI. Two-player and vs-AI modes.</span><span class="lang-ja">洗練されたUIで再構築した三目並べ。二人対戦とAI対戦モードを実装。</span></div>
           <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">AI</span></div>
-          <a href="https://thedarkcat.itch.io/tictactoe" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+          <div class="project-links">
+            <a href="https://thedarkcat.itch.io/tictactoe" target="_blank" class="project-link"><span class="lang-en-i">Play on itch.io</span><span class="lang-ja-i">itch.ioでプレイ</span></a>
+            <!-- TODO: add GitHub repo link if source is public -->
+          </div>
         </div>
       </div>
 
       <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a0a2e,#0a1a1f)">
+          <span style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:rgba(0,245,160,0.25)">浦島</span>
+        </div>
         <div class="project-body">
           <div class="project-num">04</div>
           <div class="project-title">Urashima</div>
           <div class="project-desc"><span class="lang-en">A web-based retelling of the Japanese folk tale Urashima Taro. Interactive narrative experience.</span><span class="lang-ja">日本の民話「浦島太郎」をWebで再現したインタラクティブな物語体験。</span></div>
           <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">Narrative</span></div>
-          <a href="https://kaungsetlin3013.github.io/urashima" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/urashima" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/urashima" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
       <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#0f1a0f,#1a2a1a)">
+          <span style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:rgba(0,245,160,0.25)">BG · WEB</span>
+        </div>
         <div class="project-body">
           <div class="project-num">05</div>
           <div class="project-title">Change Background Web</div>
           <div class="project-desc"><span class="lang-en">Dynamic background color changer demonstrating DOM manipulation and interactive event handling.</span><span class="lang-ja">DOM操作とインタラクティブなイベント処理を実演する背景色変更ツール。</span></div>
           <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">DOM</span><span class="tag">CSS</span></div>
-          <a href="https://kaungsetlin3013.github.io/ChangeBackgroundWEB" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/ChangeBackgroundWEB" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/ChangeBackgroundWEB" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
       <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a1000,#2a1a00)">
+          <span style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:rgba(255,107,53,0.3)">PROFILE</span>
+        </div>
         <div class="project-body">
           <div class="project-num">06</div>
           <div class="project-title">School Profile Project</div>
           <div class="project-desc"><span class="lang-en">A personal profile webpage. Clean layout with responsive design built as a school project.</span><span class="lang-ja">学校のプロジェクトとして制作したプロフィールWebページ。レスポンシブ対応。</span></div>
           <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">Responsive</span></div>
-          <a href="https://kaungsetlin3013.github.io/SchoolProfileProject/myself.html" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/SchoolProfileProject/myself.html" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/SchoolProfileProject" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
       <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#0a1a0f,#0f2a1a);display:flex;align-items:center;justify-content:center;gap:12px">
+          <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:rgba(0,245,160,0.3)">SHIFT</span>
+          <span style="font-size:1.6rem;opacity:0.4">📋</span>
+        </div>
         <div class="project-body">
           <div class="project-num">07</div>
           <div class="project-title">ShiftLog</div>
@@ -988,11 +940,19 @@
             <span class="lang-ja">複数の仕事を管理できるシフト・給与トラッカー。深夜手当の自動計算、CSV書き出し、月次請求・税金管理まで対応。データはローカル保存。</span>
           </div>
           <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">LocalStorage</span><span class="tag">Finance</span></div>
-          <a href="https://kaungsetlin3013.github.io/shiftLog/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/shiftLog/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/shiftLog" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
       <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#1a0a0a,#2a0f0f);display:flex;align-items:center;justify-content:center;gap:12px">
+          <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:rgba(255,107,53,0.35)">漫画</span>
+          <span style="font-size:1.6rem;opacity:0.4">📚</span>
+        </div>
         <div class="project-body">
           <div class="project-num">08</div>
           <div class="project-title">漫画 Reader</div>
@@ -1001,11 +961,19 @@
             <span class="lang-ja">ローカルフォルダから漫画を読めるリーダー。タイトル・作者・言語を自動解析。右から左読み、お気に入り、ズーム、全画面表示に対応。</span>
           </div>
           <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">File API</span><span class="tag">Reader</span></div>
-          <a href="https://kaungsetlin3013.github.io/mangaApp/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/mangaApp/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/mangaApp" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
       <div class="project-card">
+        <div class="project-placeholder" style="background:linear-gradient(135deg,#0a0f1a,#0f1a2a);display:flex;align-items:center;justify-content:center;gap:12px">
+          <span style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:rgba(123,47,255,0.35)">FRAMED</span>
+          <span style="font-size:1.6rem;opacity:0.4">🖼️</span>
+        </div>
         <div class="project-body">
           <div class="project-num">09</div>
           <div class="project-title">Framed — Photo Showcase</div>
@@ -1014,7 +982,11 @@
             <span class="lang-ja">ローカル写真ギャラリーアプリ。ドラッグ＆ドロップやフォルダアップロード対応。ライトボックス表示、シャッフル再生など。サーバー不要。</span>
           </div>
           <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">File API</span><span class="tag">Gallery</span></div>
-          <a href="https://kaungsetlin3013.github.io/PhotoShowcase/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/PhotoShowcase/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/PhotoShowcase" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
@@ -1028,54 +1000,79 @@
             <span class="lang-ja">池袋の実在するラーメン屋の英日バイリンガルWebサイト。メニュー、営業時間、場所を掲載。モバイル対応のクリーンなデザイン。</span>
           </div>
           <div class="project-tags"><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">Bilingual</span></div>
-          <a href="https://kaungsetlin3013.github.io/ramenShop/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/ramenShop/" target="_blank" class="project-link"><span class="lang-en-i">View project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/ramenShop" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
     <div class="project-card">
+        <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="Memories" onerror="this.style.display='none'">
         <div class="project-body">
           <div class="project-num">11</div>
           <div class="project-title">Memories</div>
           <div class="project-desc"><span class="lang-en">A Supabase-backed photo-sharing app with live camera capture, guest uploads, and a full admin panel for managing photos, devices, and upload limits.</span><span class="lang-ja">Supabaseを使ったフォト共有アプリ。カメラ撮影・ゲストアップロード機能に加え、写真・端末・アップロード制限を管理できる管理者パネルを搭載。</span></div>
           <div class="project-tags"><span class="tag">Supabase</span><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span></div>
-          <a href="https://kaungsetlin3013.github.io/photo-booth/" target="_blank" class="project-link"><span class="lang-en-i">View Project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/photo-booth/" target="_blank" class="project-link"><span class="lang-en-i">View Project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/photo-booth" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
 
       <div class="project-card">
+        <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="Festival Shop" onerror="this.style.display='none'">
         <div class="project-body">
           <div class="project-num">12</div>
           <div class="project-title">Festival Shop</div>
           <div class="project-desc"><span class="lang-en">A table-ordering web app for school festivals. Guests enter their table number, browse a customizable menu, and track live order status until it's ready.</span><span class="lang-ja">学園祭向けのテーブルオーダーアプリ。卓番号を入力してメニューを注文し、注文状況をリアルタイムで確認できる。</span></div>
           <div class="project-tags"><span class="tag">Supabase</span><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span></div>
-          <a href="https://kaungsetlin3013.github.io/food-shop/" target="_blank" class="project-link"><span class="lang-en-i">View Project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/food-shop/" target="_blank" class="project-link"><span class="lang-en-i">View Project</span><span class="lang-ja-i">プロジェクトを見る</span></a>
+            <a href="https://github.com/kaungsetlin3013/food-shop" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
 
       <div class="project-card">
+        <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="The Reckoning — Hangman" onerror="this.style.display='none'">
         <div class="project-body">
           <div class="project-num">13</div>
           <div class="project-title">The Reckoning — Hangman</div>
           <div class="project-desc"><span class="lang-en">A gothic-themed number-guessing game with Solo (vs Fate) and Two-Player Duel modes, where players set secret numbers and race to guess correctly first.</span><span class="lang-ja">ゴシック調の数当てゲーム。「運命との対決」ソロモードと2人対戦モードを搭載し、秘密の数字を設定して先に当てた方が勝利。</span></div>
           <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Game</span></div>
-          <a href="https://kaungsetlin3013.github.io/hangman/" target="_blank" class="project-link"><span class="lang-en-i">Play Game</span><span class="lang-ja-i">ゲームをプレイ</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/hangman/" target="_blank" class="project-link"><span class="lang-en-i">Play Game</span><span class="lang-ja-i">ゲームをプレイ</span></a>
+            <a href="https://github.com/kaungsetlin3013/hangman" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
 
       <div class="project-card">
+        <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="The Reckoning — Tic-Tac-Toe" onerror="this.style.display='none'">
         <div class="project-body">
           <div class="project-num">14</div>
           <div class="project-title">The Reckoning — Tic-Tac-Toe</div>
           <div class="project-desc"><span class="lang-en">A gothic twist on tic-tac-toe where old marks vanish as the board fills, forcing endless strategy. Play solo against a minimax-powered Oracle or duel a friend.</span><span class="lang-ja">古い印が盤上から消えていくゴシック風三目並べ。ミニマックスAIを搭載した「オラクル」とのソロ対戦、または2人対戦が可能。</span></div>
           <div class="project-tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Game</span></div>
-          <a href="https://kaungsetlin3013.github.io/tictactoe/" target="_blank" class="project-link"><span class="lang-en-i">Play Game</span><span class="lang-ja-i">ゲームをプレイ</span></a>
+          <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+          <div class="project-links">
+            <a href="https://kaungsetlin3013.github.io/tictactoe/" target="_blank" class="project-link"><span class="lang-en-i">Play Game</span><span class="lang-ja-i">ゲームをプレイ</span></a>
+            <a href="https://github.com/kaungsetlin3013/tictactoe" target="_blank" class="project-link project-link-secondary">GitHub</a>
+          </div>
         </div>
       </div>
 
 <div class="project-card">
+  <div class="project-placeholder" style="background:linear-gradient(135deg,#1f122b,#2b121f)">
+    <span style="font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:rgba(255,107,107,0.25)">漢字</span>
+  </div>
   <div class="project-body">
     <div class="project-num">15</div>
     <div class="project-title">Kanji Quiz</div>
@@ -1088,14 +1085,19 @@
       <span class="tag">JavaScript</span>
       <span class="tag">Education</span>
     </div>
-    <a href="https://kaungsetlin3013.github.io/kanjiQuiz/" target="_blank" class="project-link">
-      <span class="lang-en-i">View project</span>
-      <span class="lang-ja-i">プロジェクトを見る</span>
-    </a>
+    <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+    <div class="project-links">
+      <a href="https://kaungsetlin3013.github.io/kanjiQuiz/" target="_blank" class="project-link">
+        <span class="lang-en-i">View project</span>
+        <span class="lang-ja-i">プロジェクトを見る</span>
+      </a>
+      <a href="https://github.com/kaungsetlin3013/kanjiQuiz" target="_blank" class="project-link project-link-secondary">GitHub</a>
+    </div>
   </div>
 </div>
 
 <div class="project-card">
+  <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="Inventory Management System" onerror="this.style.display='none'">
   <div class="project-body">
     <div class="project-num">16</div>
     <div class="project-title">Inventory Management System</div>
@@ -1112,14 +1114,19 @@
       <span class="tag">HTML/CSS</span>
       <span class="tag">Inventory</span>
     </div>
-    <a href="https://kaungsetlin3013.github.io/inventory/" target="_blank" class="project-link">
-      <span class="lang-en-i">Open Project</span>
-      <span class="lang-ja-i">プロジェクトを見る</span>
-    </a>
+    <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+    <div class="project-links">
+      <a href="https://kaungsetlin3013.github.io/inventory/" target="_blank" class="project-link">
+        <span class="lang-en-i">Open Project</span>
+        <span class="lang-ja-i">プロジェクトを見る</span>
+      </a>
+      <a href="https://github.com/kaungsetlin3013/inventory" target="_blank" class="project-link project-link-secondary">GitHub</a>
+    </div>
   </div>
 </div>
 
       <div class="project-card">
+  <img class="project-img" src="PASTE_SCREENSHOT_URL_HERE" alt="Simple Note App" onerror="this.style.display='none'">
   <div class="project-body">
     <div class="project-num">17</div>
     <div class="project-title">Simple Note App</div>
@@ -1136,10 +1143,14 @@
       <span class="tag">HTML/CSS</span>
       <span class="tag">Productivity</span>
     </div>
-    <a href="https://kaungsetlin3013.github.io/Note/" target="_blank" class="project-link">
-      <span class="lang-en-i">Open App</span>
-      <span class="lang-ja-i">アプリを開く</span>
-    </a>
+    <span class="project-note"><span class="lang-en-i">Client-side / Runs locally</span><span class="lang-ja-i">クライアント完結・ローカル動作</span></span>
+    <div class="project-links">
+      <a href="https://kaungsetlin3013.github.io/Note/" target="_blank" class="project-link">
+        <span class="lang-en-i">Open App</span>
+        <span class="lang-ja-i">アプリを開く</span>
+      </a>
+      <a href="https://github.com/kaungsetlin3013/Note" target="_blank" class="project-link project-link-secondary">GitHub</a>
+    </div>
   </div>
 </div>
 
@@ -1224,6 +1235,9 @@
           <span class="lang-en">I'm open to backend engineering roles, game dev collaborations, and creative web projects. Let's talk.</span>
           <span class="lang-ja">バックエンドエンジニア職、ゲーム開発のコラボ、Webプロジェクトへの参加を積極的に求めています。ぜひご連絡ください。</span>
         </p>
+        <a href="assets/resume.pdf" download class="btn btn-ghost no-magnetic" style="margin-top:28px">
+          <span class="lang-en-i">Download Resume / CV</span><span class="lang-ja-i">履歴書・CVをダウンロード</span>
+        </a>
       </div>
       <div class="contact-links reveal">
         <a class="contact-link" id="email-link" href="#" target="_blank" rel="noopener">
@@ -1316,7 +1330,7 @@
     }
   }
 
-  document.querySelectorAll('.hero-desc, .about-text p, .why-card-body, .exp-desc, .contact-sub, .project-desc, .project-title').forEach(wrapWords);
+  document.querySelectorAll('.hero-desc, .about-text p, .why-card-body, .exp-desc, .contact-sub').forEach(wrapWords);
 
   var words = Array.prototype.slice.call(document.querySelectorAll('.word-spot'));
   var radius = 34; // matches roughly the cursor ring's radius, plus a small halo
@@ -1367,41 +1381,6 @@
   hoverEls.forEach(function(el) {
     el.addEventListener('mouseenter', function() { ring.classList.add('hover'); });
     el.addEventListener('mouseleave', function() { ring.classList.remove('hover'); });
-  });
-})();
-
-// ── HERO SHAPES PARALLAX ──
-(function() {
-  var hero = document.querySelector('.hero');
-  var wraps = document.querySelectorAll('.hero-shapes .shape-wrap');
-  if (!hero || !wraps.length) return;
-
-  var maxShift = 50; // px, base movement amount at full strength
-  var influence = 550; // px, radius around a shape where the cursor affects it
-
-  hero.addEventListener('mousemove', function(e) {
-    var heroRect = hero.getBoundingClientRect();
-    var mx = e.clientX - heroRect.left;
-    var my = e.clientY - heroRect.top;
-
-    wraps.forEach(function(w) {
-      var wRect = w.getBoundingClientRect();
-      var cx = wRect.left - heroRect.left + wRect.width / 2;
-      var cy = wRect.top - heroRect.top + wRect.height / 2;
-      var dx = cx - mx;
-      var dy = cy - my;
-      var dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      var strength = Math.max(0, 1 - dist / influence);
-      var depth = parseFloat(w.dataset.depth) || 1;
-
-      var tx = (dx / dist) * strength * maxShift * depth;
-      var ty = (dy / dist) * strength * maxShift * depth;
-      w.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px)';
-    });
-  });
-
-  hero.addEventListener('mouseleave', function() {
-    wraps.forEach(function(w) { w.style.transform = 'translate(0,0)'; });
   });
 })();
 
@@ -1724,19 +1703,6 @@ function setLang(lang) {
 })();
 
 
-// ── PROJECT CARD CLICK-THROUGH ──
-(function() {
-  document.querySelectorAll('.project-card').forEach(function(card) {
-    var link = card.querySelector('.project-link');
-    if (!link) return;
-    card.addEventListener('click', function(e) {
-      if (e.target.closest('.project-link')) return; // let the real link handle its own click
-      if (e.target.closest('a')) return;
-      window.open(link.href, link.target || '_self');
-    });
-  });
-})();
-
 // ── HAMBURGER ──
 var hamburger = document.getElementById('hamburger');
 var drawer = document.getElementById('mobileDrawer');
@@ -1801,185 +1767,6 @@ hamburger.addEventListener('click', function() {
 
   window.addEventListener('resize', function() { moveIndicator(getActiveLink()); });
 })();
-
-// ── IDLE HACK EFFECT ──
-(function() {
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  var overlay = document.getElementById('idle-hack');
-  var canvas = document.getElementById('idle-hack-canvas');
-  var linesEl = document.getElementById('idle-hack-lines');
-  if (!overlay || !canvas || !linesEl) return;
-  var ctx = canvas.getContext('2d');
-
-  var IDLE_MS = 20000;
-  var idleTimeout = null;
-  var idleShowing = false;
-  var sceneIndex = 0;
-  var idleTimers = [];
-
-  function pushTimer(id) { idleTimers.push(id); }
-  function clearIdleTimers() {
-    idleTimers.forEach(function(id) { clearInterval(id); clearTimeout(id); });
-    idleTimers = [];
-  }
-
-  // -- matrix rain --
-  var fontSize = 15, cols = [], rafId = null;
-  var chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789<>/#{}';
-
-  function resizeMatrix() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    var n = Math.ceil(canvas.width / fontSize);
-    cols = new Array(n).fill(0).map(function() { return Math.random() * -100; });
-  }
-  function drawMatrix() {
-    ctx.fillStyle = 'rgba(5,8,8,0.14)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = fontSize + 'px monospace';
-    for (var i = 0; i < cols.length; i++) {
-      var ch = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillStyle = Math.random() < 0.04 ? '#c8ffe8' : 'rgba(0,245,160,0.7)';
-      ctx.fillText(ch, i * fontSize, cols[i] * fontSize);
-      if (cols[i] * fontSize > canvas.height && Math.random() > 0.975) cols[i] = 0;
-      cols[i]++;
-    }
-    rafId = requestAnimationFrame(drawMatrix);
-  }
-  function startMatrix() { resizeMatrix(); cancelAnimationFrame(rafId); drawMatrix(); }
-  function stopMatrix() { cancelAnimationFrame(rafId); if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); }
-  window.addEventListener('resize', function() { if (idleShowing) resizeMatrix(); });
-
-  // -- typed terminal script --
-  function typeLine(container, text, cls, cb, speed) {
-    var el = document.createElement('div');
-    if (cls) el.className = cls;
-    container.appendChild(el);
-    var i = 0;
-    var id = setInterval(function() {
-      el.textContent = text.slice(0, i);
-      i++;
-      if (i > text.length) { clearInterval(id); if (cb) cb(); }
-    }, speed || 22);
-    pushTimer(id);
-  }
-  function pauseThen(ms, cb) { pushTimer(setTimeout(cb, ms)); }
-  function progressLine(container, label, cb) {
-    var el = document.createElement('div');
-    container.appendChild(el);
-    var pct = 0;
-    var id = setInterval(function() {
-      pct += 6 + Math.floor(Math.random() * 10);
-      if (pct > 100) pct = 100;
-      var filled = Math.round(pct / 5);
-      el.textContent = label + ' [' + '█'.repeat(filled) + '░'.repeat(20 - filled) + '] ' + pct + '%';
-      if (pct >= 100) { clearInterval(id); pauseThen(250, cb); }
-    }, 80);
-    pushTimer(id);
-  }
-  function runScript(el, steps, i, onDone) {
-    if (!idleShowing) return;
-    if (i >= steps.length) { onDone(); return; }
-    var s = steps[i];
-    function nextStep() { runScript(el, steps, i + 1, onDone); }
-    if (s.pause) { pauseThen(s.pause, nextStep); return; }
-    if (s.progress) { progressLine(el, s.progress, nextStep); return; }
-    typeLine(el, s.text, s.cls, nextStep, s.speed);
-  }
-
-  var scenes = [
-    [
-      { text: '> initiating remote session...', cls: 'hl-dim' },
-      { pause: 300 },
-      { text: '> target: kaung.dev [tokyo-jp]', cls: 'hl-dim' },
-      { pause: 300 },
-      { progress: 'bypassing firewall' },
-      { text: '> WARNING: intrusion attempt logged', cls: 'hl-warn' },
-      { pause: 400 },
-      { text: '> spoofing trace route... [OK]', cls: 'hl-dim' },
-      { pause: 300 },
-      { text: '> access granted.', cls: 'hl-ok' }
-    ],
-    [
-      { text: 'root@kaung-dev:~$ nmap -sS 10.0.0.0/24', cls: 'hl-dim' },
-      { pause: 250 },
-      { text: 'scanning 254 hosts...', cls: 'hl-dim' },
-      { pause: 300 },
-      { text: 'open ports: 22 80 443 8080', cls: 'hl-dim' },
-      { pause: 250 },
-      { progress: 'exploiting CVE-2024-31337' },
-      { text: 'shell acquired: /bin/bash', cls: 'hl-ok' },
-      { pause: 250 },
-      { text: 'root@kaung-dev:~$ whoami', cls: 'hl-dim' },
-      { text: 'root', cls: 'hl-ok' }
-    ],
-    [
-      { text: '> decrypting core files...', cls: 'hl-dim' },
-      { progress: 'decryption' },
-      { text: '> compiling payload...', cls: 'hl-dim' },
-      { pause: 300 },
-      { text: '> uploading to remote host...', cls: 'hl-dim' },
-      { pause: 250 },
-      { text: '> connection unstable...', cls: 'hl-warn' },
-      { pause: 400 },
-      { text: "> ...just kidding, it's a portfolio site 👋", cls: 'hl-ok' },
-      { pause: 200 },
-      { text: '> nice to meet you.', cls: 'hl-dim' }
-    ]
-  ];
-
-  function runIdleScript() {
-    linesEl.innerHTML = '';
-    var scene = scenes[sceneIndex % scenes.length];
-    sceneIndex++;
-    runScript(linesEl, scene, 0, function() {
-      pauseThen(2400, function() { if (idleShowing) runIdleScript(); });
-    });
-  }
-
-  function scheduleIdle() {
-    clearTimeout(idleTimeout);
-    idleTimeout = setTimeout(triggerIdle, IDLE_MS);
-  }
-  function triggerIdle() {
-    if (document.hidden) { scheduleIdle(); return; }
-    idleShowing = true;
-    overlay.classList.add('show');
-    startMatrix();
-    sceneIndex = 0;
-    runIdleScript();
-  }
-  function cancelIdle() {
-    if (idleShowing) {
-      idleShowing = false;
-      overlay.classList.remove('show');
-      stopMatrix();
-      clearIdleTimers();
-      linesEl.innerHTML = '';
-    }
-    scheduleIdle();
-  }
-
-  ['mousemove', 'mousedown', 'keydown', 'touchstart', 'wheel', 'scroll'].forEach(function(evt) {
-    window.addEventListener(evt, cancelIdle, { passive: true });
-  });
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-      clearTimeout(idleTimeout);
-    } else {
-      clearTimeout(idleTimeout);
-      scheduleIdle();
-    }
-  });
-
-  if (window.__bootDone) {
-    scheduleIdle();
-  } else {
-    window.addEventListener('bootdone', scheduleIdle, { once: true });
-  }
-})();
-
 </script>
 </body>
 </html>
